@@ -1,23 +1,9 @@
-# Prediction pack: Broad DepMap (planned)
+# Prediction pack: Broad DepMap
 
-**One record = one cancer cell line grown in a lab**, with gene expression and CRISPR dependency scores: how much the cell line's growth depends on each gene.
+**Ready.** [starter.csv](starter.csv) has 1,103 lab-grown cancer cell-line models from [DepMap Public 24Q4 v1](https://doi.org/10.25452/figshare.plus.27993248.v1), about 101 kB. One row is one model. The eight gene columns contain expression on the source log2(TPM+1) scale; the target, `kras_gene_effect`, is the CRISPR knockout gene-effect score. Both were rounded to four decimal places for this extract.
 
-**Status: planned, not yet available.** The organizers couldn't reach DepMap from the environment used to build this pack, so its current license and file sizes haven't been checked.
+**Start here:** open the CSV or run `python data/depmap/baseline.py` with pandas and scikit-learn. The example compares ridge regression against predicting the training-set mean. It uses 921 training models and 182 holdouts from the Lung and Bowel lineages. Models from donors found in those holdout lineages are excluded from training, and models without donor metadata are omitted. The compact table omits donor IDs and demographic fields. The holdout labels are public practice data, not a blind benchmark.
 
-## What it will contain
-- A frozen extract: selected gene expression and CRISPR dependency values for a documented set of cell lines, with `sources.csv` checksums and the DepMap release name.
-- A documented split that keeps related cell lines (same lineage) on the same side.
-- A simple baseline and its predictions.
+**Build:** an evaluation tool that compares a model with the mean baseline, checks for model overlap, and shows errors by lineage. Scores describe growth effects in lab models. Do not interpret them as patient outcomes or join them to patient data.
 
-## The exercise
-Predict which cell lines are sensitive to knocking out a particular gene, then build a tool that explains where the model fails.
-
-**This is a lab prediction, not a patient treatment prediction.** A cell line's response says nothing by itself about a patient.
-
-## What it can't do
-Cell lines aren't patients: **don't join DepMap to TCGA, CPTAC or any patient record.**
-
-## To make it ready (organizers)
-1. Confirm the DepMap release and its license terms on depmap.org.
-2. Pick 1 target gene, the expression features, and about 500 to 1,000 cell lines. Keep the download under about 200 MB.
-3. Build the split by lineage, run the baseline, and pin checksums in `sources.csv`.
+[Source manifest](sources.csv) records the original files and SHA-256 hashes. Run `python data/depmap/build.py` only to rebuild the extract; the three raw downloads total about 936 MB and stay untracked. Credit Broad DepMap 24Q4 Public (2024), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); this challenge subset selects complete model records and eight features, adds a split, and rounds values.

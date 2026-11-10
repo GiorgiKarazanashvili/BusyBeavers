@@ -1,6 +1,6 @@
 # Pathology pack: PathMNIST
 
-**One record = one small image patch of colorectal tissue, labelled with one of nine tissue types.** It's the quickest way to start building with images: the default download is the smallest version, it runs on a laptop, and no GPU is needed.
+**One record = one small image patch of colorectal tissue, labelled with one of nine tissue types.** It's the quickest way to start building with images: the default download is the 205.6 MB version, it runs on a laptop, and no GPU is needed.
 
 ## Get started
 ```bash
@@ -51,6 +51,6 @@ Tissue classifiers, visual search ("find patches like this one"), image-quality 
 The patches have no patient IDs, clinical data or molecular data, so **don't join them to TCGA or CPTAC records**. There's no documented match.
 
 ## Status and source
-- **Status:** checksums are pinned from the official `medmnist` package (see `sources.csv`). File sizes will be added after the first real download. The organizers couldn't download from Zenodo in the environment used to build this pack, so the fetch and the baseline's accuracy on real data still need a run on a normal laptop before kickoff. The gallery and baseline code were tested on a stand-in file with the same structure.
+- **Status: ready.** Tested on the real 28 × 28 pack: download passed the publisher checksum, the gallery generated 216 patches, and the CPU baseline achieved 62.0% accuracy on 7,180 public test patches. It produced a 200-patch review queue. This is a practice baseline, not a judging target or a clinical result. Larger sizes (64, 128, 224) were not tested in this run.
 - **Source:** Yang, J. et al. MedMNIST v2: A large-scale lightweight benchmark for 2D and 3D biomedical image classification. *Scientific Data* 10, 41 (2023). Original images: Kather, J.N., Halama, N. & Marx, A. 100,000 histological images of human colorectal cancer and healthy tissue (Zenodo, 2018).
 - **License:** CC BY 4.0.

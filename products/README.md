@@ -1,6 +1,6 @@
 # Products
 
-Pick a user. Build **one workflow that user can finish**. Demo it on real TCGA breast cancer data. Build a web app, an AI agent, a visual workflow, or a tool that plugs into an existing notebook.
+Pick a user. Build **one workflow that user can finish**. Featured products start with real TCGA breast cancer data. For a custom build, confirm the pack and judging scope with organizers. Build a web app, an AI agent, a visual workflow, or a tool that plugs into an existing notebook.
 
 - **Cohort Firewall** catches what could make a result unreliable.
 - **Evidence Navigator** helps someone investigate a result and decide what to do.
@@ -25,10 +25,10 @@ These use the other [data packs](../data/README.md). They have starter data and 
 | Track | Product | Idea | Data pack |
 |---|---|---|---|
 | Firewall | Model Crash Lab | Stress-test a tissue classifier on altered images and find its worst failure | [PathMNIST](../data/pathmnist/README.md): use the baseline's predictions, `--size 64` or more for blur and color tests; [CAMELYON17](../data/camelyon17/README.md) for testing across hospitals (advanced) |
-| Firewall | Benchmark Builder | An evaluation service for cell-line predictions that catches leaky splits | [DepMap](../data/depmap/README.md) (planned) |
-| Firewall | Amendment Replay Engine | Replay a fictional cohort against two versions of trial eligibility rules | [ClinicalTrials.gov](../data/clinical-trials/README.md) (planned), **fictional** cases only |
+| Firewall | Benchmark Builder | An evaluation service for cell-line predictions that catches leaky splits | [DepMap](../data/depmap/README.md) |
+| Firewall | Amendment Replay Engine | Replay fictional cases against two versions of a fictional date rule; inspect real registry snapshots separately | [ClinicalTrials.gov](../data/clinical-trials/README.md), **fictional** cases only |
 | Navigator | Pathology Search and Review | Find similar tissue patches and queue uncertain predictions for review | [PathMNIST](../data/pathmnist/README.md): `review_queue.csv` from the baseline is a ready-made starting queue |
 | Navigator | CT Review Viewer | Compare a model's nodule output with each radiologist's marks | [LIDC-IDRI](../data/lidc-idri/README.md) |
-| Navigator | Multimodal Case Room, CPTAC edition | The featured Case Room on lung, colon or kidney cases | [CPTAC](../data/cptac/README.md) slides and CT; molecular data when added |
+| Navigator | Multimodal Case Room, CPTAC edition | The featured Case Room on lung, colon or kidney cases | [CPTAC](../data/cptac/README.md) protein starter, slides and CT links |
 
 Or pitch something else entirely: name the user, the workflow, and how it proves its track.

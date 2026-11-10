@@ -10,7 +10,9 @@
 | CPTAC lung, colon and kidney slides and lung CT | NCI Imaging Data Commons (`cptac_luad`, `cptac_coad`, `cptac_ccrcc`) | CC BY 4.0 | Manifests committed; images stay at the source |
 | LIDC-IDRI lung CT and annotations | NCI Imaging Data Commons (`lidc_idri`) | CC BY 3.0 | Manifest committed; optional exercise fetched |
 | CAMELYON17 | [Radboud University Medical Center](https://camelyon-dataset.s3.amazonaws.com/CAMELYON17/README.md) | CC0 | Labels (`stages.csv`) committed; slides source-linked |
-| DepMap, ClinicalTrials.gov | Broad Institute; U.S. National Library of Medicine | To be confirmed | Planned |
+| CPTAC protein starter | [BCM matrices, cptac distribution](https://doi.org/10.5281/zenodo.8394329) | CC BY 4.0 | Compact six-protein extract committed; original matrices fetched |
+| DepMap starter | [Broad DepMap 24Q4 Public v1](https://doi.org/10.25452/figshare.plus.27993248.v1) | CC BY 4.0 | Compact extract committed; original matrices fetched |
+| ClinicalTrials.gov | [U.S. National Library of Medicine](https://clinicaltrials.gov/about-site/terms-conditions) | Source terms apply | Registry records fetched, not committed; fictional fixture authored for the challenge |
 | Breast Cancer Wisconsin (Original), warm-up only | [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/15) | CC BY 4.0 | Committed in `warmup/wisconsin/` |
 
 ## How to credit it

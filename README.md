@@ -10,8 +10,8 @@
 <a href="https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/tcga_starter.ipynb"><img alt="Run the starter" src="https://img.shields.io/badge/%E2%91%A2%20Run%20the%20starter-1a7f37?style=for-the-badge"></a>
 </p>
 
-- **Explore the data:** seven data packs (tumor molecular data, tissue images, CT scans, cell lines, trial records) plus a 30-minute warm-up. Each starts with a small laptop download; larger datasets and heavier models are optional.
-- **Pick a mission:** six featured products and four more to pitch, across two tracks.
+- **Explore the data:** seven data packs (tumor molecular data, tissue images, CT scans, cell lines, trial records) plus a 30-minute warm-up. The menu shows included starters, source downloads and viewer links.
+- **Pick a mission:** six featured products and optional custom builds, across two tracks.
 - **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser.
 
 ## Pick a user, build one workflow
@@ -30,11 +30,11 @@ Build a web app, an AI agent, a visual workflow, or a tool that plugs into a not
 | Pack | One record is… | Status |
 |---|---|---|
 | [TCGA breast cancer](data/tcga-brca/README.md) *(core)* | A tumor sample with clinical, survival, mutation, copy number, RNA and protein data, plus slide links | Ready |
-| [Pathology: PathMNIST](data/pathmnist/README.md) | A labelled colorectal tissue patch | Ready to test |
-| [Molecular + imaging: CPTAC](data/cptac/README.md) | A lung, colon or kidney cancer case | Slides and CT ready; protein pending |
+| [Pathology: PathMNIST](data/pathmnist/README.md) | A labelled colorectal tissue patch | Ready |
+| [Molecular + imaging: CPTAC](data/cptac/README.md) | A lung, colon or kidney cancer case | Ready: protein, slides and CT links |
 | [Imaging: LIDC-IDRI](data/lidc-idri/README.md) | A chest CT with radiologists' nodule marks | Ready |
-| [Prediction: DepMap](data/depmap/README.md) | A cancer cell line | Planned |
-| [Trial records: ClinicalTrials.gov](data/clinical-trials/README.md) | A dated trial record + fictional cases | Planned |
+| [Prediction: DepMap](data/depmap/README.md) | A cancer cell line | Ready |
+| [Trial records: ClinicalTrials.gov](data/clinical-trials/README.md) | A dated trial record + fictional cases | Ready for practice |
 | [Advanced: CAMELYON17](data/camelyon17/README.md) | A lymph-node slide from one of 5 hospitals | Ready (source-linked) |
 
 **Only join records where a documented match exists.** Tissue patches, cell lines, tumor samples and CT scans describe different things. See [the joining rule](data/README.md#the-joining-rule).

@@ -1,23 +1,9 @@
-# Trial records pack: ClinicalTrials.gov (planned)
+# Trial records and fictional replay exercise
 
-**One record = one dated version of a cancer trial's eligibility criteria**, plus organizer-written **fictional** cases to test them against.
+**Ready for practice:** three real oncology registry records can be fetched, and an entirely fictional two-version fixture can be replayed offline. Nothing here screens patients or represents a real protocol amendment.
 
-**Status: planned, not yet available.** The organizers couldn't reach ClinicalTrials.gov from the environment used to build this pack, and the fictional cases need clinician review before release.
+Run from the repo root: `python data/clinical-trials/fetch.py`. It checks the response against the recorded SHA-256 and stores it locally under `raw/`. See [sources.csv](sources.csv) for source links and dates. If the registry changes, stop and use the record link for exploration; do not treat a newer version as the frozen response.
 
-## What it will contain
-- Two dated versions of each of 3 to 5 selected cancer trial records, linked to the source record and its version history.
-- 30 to 50 **fictional** cases, each a short profile with dated facts. Some are deliberately incomplete (for example, a month and year but no day).
-- An answer key, kept private, saying which cases move in, move out, or need more evidence between versions.
-
-## The exercise
-Build an assistant that compares eligibility language between versions and shows which fictional cases move in, move out, or need more evidence, with the exact clause behind each change.
-
-A change in the registry record shows that the public record changed. Call it a formal protocol amendment only when supporting documentation confirms it.
-
-## What it can't do
-The cases are fictional: **never use or add real patient records.** Trial eligibility here is a research exercise, not screening real people for trials.
-
-## To make it ready (organizers)
-1. Pull version histories for about 10 recruiting breast cancer trials (the `cthist` R package works) and keep 3 to 5 with meaningful eligibility changes.
-2. Write the fictional cases and the key; have a clinician review both.
-3. Pin checksums of the saved record versions in `sources.csv`.
+- The real records are dated snapshots for exploring source structure and drafting criteria citations. Cite ClinicalTrials.gov and the NCT ID; review the [source terms](https://clinicaltrials.gov/about-site/terms-conditions). No real record is assigned to the fictional cases.
+- [fictional_rules.json](fictional_rules.json) and [fictional_cases.csv](fictional_cases.csv) form a separate, organizer-authored workflow fixture. Run the example with `python data/clinical-trials/replay.py`. Compare a 30-day and a 60-day rule, show the clause and date calculation, and route missing, incomplete, or inconsistent dates to review. It is not clinician-reviewed, and historical registry versions are not included.
+- A public registry record change is not by itself proof of a formal protocol amendment. Do not add real patient records or claim clinical eligibility.
