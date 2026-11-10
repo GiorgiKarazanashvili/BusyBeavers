@@ -1,32 +1,36 @@
-# OncoSys AI Healthcare Hackathon — event data
+# OncoSys AI Healthcare Hackathon
 
-**Dataset:** Breast Cancer Wisconsin (Original), UCI Machine Learning Repository. Frozen for this event as `v1.0.0`.
+## Can one number describe 1989–1991?
+A data-use reviewer wants to publish: **"Across 1989–1991, X% of samples in the Wisconsin breast cancer collection were malignant."** Should they report that pooled figure, show collection groups alongside it, or pause? Find out, and show the evidence.
 
-**This is a data-readiness exercise. Classifiers, diagnosis and clinical claims are out of scope.**
+**Start here:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/starter.ipynb) or open [`starter/starter.ipynb`](starter/starter.ipynb). It loads the data, explains what one row means, and draws a first chart in under a minute.
 
-## The shared question
-A reviewer wants to report one malignant share across all eight collection groups. Should they report the pooled figure, show group results alongside it, or pause? Show the evidence behind your decision and explain what the data can support.
+*This is a data-readiness exercise. Classifiers, diagnosis and clinical claims are out of scope.*
 
 | Track | Brief | What you build |
 |---|---|---|
-| **Cohort Firewall** | `track1-cohort-firewall/` | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it |
-| **Evidence Navigator** | `track2-evidence-navigator/` | An interactive tool that helps four kinds of users understand the findings and make the publishing decision |
+| **Cohort Firewall** | [`track1-cohort-firewall/`](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it |
+| **Evidence Navigator** | [`track2-evidence-navigator/`](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision |
 
-The full rules and the scoring rubric for each track are in the challenge package.
+The full rules and each track's scoring rubric are in the challenge package. Coming next: a preview of the [OncoSys Cancer Data Lab](CANCER_DATA_LAB_PREVIEW.md) (not part of this weekend's scoring).
 
-## Files
+## The data
+**Breast Cancer Wisconsin (Original)**, UCI Machine Learning Repository, frozen for this event as `v1.0.0`. Each row is one sample from a fine-needle aspirate of a breast mass, collected 1989–1991. An examiner scored nine cell features from 1 to 10, and each sample is labelled benign or malignant.
+
 | Path | What it is |
 |---|---|
-| `data/breast-cancer-wisconsin.data` | **Official data.** 699 rows, no header row; `?` means missing |
+| `data/wisconsin_readable.csv` | **Start with this one.** The same 699 rows with column names, empty cells for missing values, a `source_row` link back to the official file, and **derived** collection groups (reconstructed from UCI's documentation, not recorded in the source data) |
+| `data/data_dictionary.csv` | What every column means and where it came from |
+| `data/breast-cancer-wisconsin.data` | **Official file**, exactly as UCI publishes it: no header row; `?` means missing |
 | `data/breast-cancer-wisconsin.names` | UCI's documentation. Read sections 4, 7 and 8. |
-| `SHA256SUMS` | Checksums for the official files. Verify before you start. |
-| `starter/starter.ipynb` | Loads the data, verifies checksums and derives collection groups |
+| `SHA256SUMS` | Checksums for everything in `data/` |
 | `practice/` | Two practice cases for testing how your tool handles provenance. Not for judged results. |
 | `examples/` | An optional shared findings format and a worked example |
 | `SUBMISSION_CHECKLIST.md` | What to check before the code freeze |
 
-## Quick start
-**Option A — your computer**
+**Official vs readable:** the readable CSV is a convenience copy. Your results should still name the official file and its checksum, and use `source_row` to show which source rows they rest on.
+
+## Run it on your computer
 ```bash
 git clone https://github.com/disleveK/oncosys-hackathon-challenge.git
 ```
@@ -38,13 +42,11 @@ sha256sum -c SHA256SUMS
 ```
 On macOS, use `shasum -a 256 -c SHA256SUMS`.
 ```bash
-pip install pandas jupyter
+pip install pandas matplotlib jupyter
 ```
 ```bash
 jupyter notebook starter/starter.ipynb
 ```
-
-**Option B — no install:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/starter.ipynb). The notebook downloads and verifies the data itself.
 
 ## Practice cases
 Test your tool on [`practice/`](practice/README.md) before Saturday:
