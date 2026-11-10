@@ -22,6 +22,6 @@
 Import the reference output. Review its repairs, reject one that isn't supported by the findings, and export a decision record that keeps the original analysis and the reason for the rejection.
 
 ## What judges will test
-At the finale, you import a **different team's** Control Tower output that you haven't seen, including at least one unsupported change.
+A findings file you haven't seen, including at least one unsupported repair. Import it live and export your `decisions`; the organizers' checker compares them with the answer key, and judges see that comparison while they score. At the finale, you also import a **different team's** Control Tower output.
 
 **Suggested stack:** Streamlit or a small web app, pandas, the validator.

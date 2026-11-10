@@ -16,7 +16,7 @@
 1. A request box or canvas. An AI can turn the request into filters and joins, but they must be **editable** before they run.
 2. A step-by-step view of how many samples and patients survive each filter and join.
 3. A check after every join: did the number of rows grow faster than the number of distinct samples or patients? Show where.
-4. Export the final cohort definition as a script or notebook that reproduces it exactly.
+4. Export the final cohort definition as a script or notebook that reproduces it exactly, **plus `cohort_samples.csv`**: one row per sample in the final cohort, with a `sample_id` column (the 15-character TCGA sample barcode). Duplicates in this file mean the inflation wasn't fixed.
 
 **Stretch:** save and compare cohort versions; explain each exclusion in plain words.
 
@@ -24,6 +24,6 @@
 Ask for "primary tumors with both RNA and protein data and a diagnostic slide". Add the slide join. The tool shows exactly where the count inflated and lets the user fix it before exporting.
 
 ## What judges will test
-A different cohort request that inflates through a different join.
+A different cohort request that inflates through a different join. Run it live and export `cohort_samples.csv`; the organizers' checker compares it with the correct cohort, and judges see that comparison while they score.
 
 **Suggested stack:** DuckDB, Streamlit or a node-based canvas library, an LLM for the plain-English request.

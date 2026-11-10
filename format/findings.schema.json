@@ -176,6 +176,22 @@
           },
           "needs_human_review": {
             "type": "boolean"
+          },
+          "claim_text": {
+            "type": "string",
+            "description": "Claim Auditor: the claim exactly as written in the report"
+          },
+          "claim_verdict": {
+            "enum": [
+              "supported",
+              "contradicted",
+              "insufficient_evidence"
+            ],
+            "description": "Claim Auditor: the verdict for this claim"
+          },
+          "correct_value": {
+            "type": "string",
+            "description": "Claim Auditor: for a contradicted claim, what the data actually shows (for example '16.7% (141 of 844)')"
           }
         }
       }

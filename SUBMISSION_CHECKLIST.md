@@ -15,9 +15,13 @@ Submit through the judging form by the **code freeze: Saturday, November 14, 2:1
 - [ ] **Short demo video** link in the README.
 - [ ] **Third-party code** and its licenses listed.
 
-## Cohort Control Tower and Repair Review Desk
-- [ ] Your output (Control Tower) or decisions (Repair Review Desk) pass `python format/validate.py`.
-- [ ] You tested against `format/examples/control-tower-practice-B.json` or a release you built with `make_release.py`.
+## Output files the organizers' checker reads
+Judges run each featured tool on an input you haven't seen, and a checker compares the output with an answer key. Your tool must be able to write:
+- [ ] **Cohort Control Tower:** `findings.json` (shared format) for a new release.
+- [ ] **Repair Review Desk:** the imported file with your `decisions` added (shared format).
+- [ ] **Research Claim Auditor:** `audit.json` (shared format, one `claim_check` finding per claim).
+- [ ] **Cohort Studio:** `cohort_samples.csv` with a `sample_id` column.
+- [ ] Shared-format files pass `python format/validate.py`. Practice with `format/examples/control-tower-practice-B.json` or a release built with `make_release.py`.
 
 ## AI features
 - [ ] The AI runs real queries or reads real files and shows its sources; it doesn't answer from memory.

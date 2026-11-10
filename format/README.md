@@ -2,7 +2,7 @@
 
 One small JSON file that one team's tool writes and another team's tool reads. It's how a Cohort Firewall product hands its results to an Evidence Navigator product.
 
-**Required** for Cohort Control Tower (writes it) and Repair Review Desk (reads it and adds decisions). **Optional** for every other product, but using it makes your tool work with others.
+**Required** for Cohort Control Tower (writes findings), Repair Review Desk (reads them and adds decisions) and Research Claim Auditor (writes one `claim_check` finding per claim). **Optional** for every other product, but using it makes your tool work with others.
 
 ## Check your file
 ```bash
@@ -22,6 +22,7 @@ The validator checks the structure, and that every repair and decision points at
 | `analyses` | Firewall tools | Before and after results of each analysis you reran |
 | `repairs` | Firewall tools | Proposed fixes, each tied to the findings it resolves |
 | `decisions` | Navigator tools | Approve, reject or request more evidence for each repair, with the reason and the reviewer's role |
+| `claim_text`, `claim_verdict`, `correct_value` (in a finding) | Claim Auditor | The claim, its verdict (supported, contradicted, insufficient evidence) and, if contradicted, what the data shows |
 
 **Evidence pointers** (`kind` + `id`) can name a sample, patient, gene, protein, slide, file, release, analysis, claim or row. Add `release`, `file` or a viewer `url` so a reviewer can find it.
 
