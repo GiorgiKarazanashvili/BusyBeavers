@@ -12,7 +12,7 @@
 
 - **Explore the data:** seven data packs (tumor molecular data, tissue images, CT scans, cell lines, trial records) plus a 30-minute warm-up. The menu shows included starters, source downloads and viewer links.
 - **Pick a mission:** six featured products and optional custom builds, across two tracks.
-- **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser.
+- **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser. You don't need a GitHub account to open the starter. You'll need to sign in to Google to run it in Colab; no Google account? [Run it on your computer](#run-it-on-your-computer) instead.
 
 ## Pick a user, build one workflow
 | Track | What it does | Featured products |
@@ -63,6 +63,7 @@ Checkpoints aren't part of the rubric, but Checkpoint 2 is the best way to find 
 | [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | What to check before the code freeze |
 
 ## Run it on your computer
+No Google account, or prefer local? Run the same starter in Jupyter on your laptop; no GitHub account needed to clone a public repo.
 ```bash
 git clone https://github.com/disleveK/oncosys-hackathon-challenge.git
 ```
