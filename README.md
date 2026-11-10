@@ -1,36 +1,55 @@
-# OncoSys AI Healthcare Hackathon
+# OncoSys Cancer AI Lab: Healthcare AI Hackathon
 
-## Can one number describe 1989–1991?
-A data-use reviewer wants to publish: **"Across 1989–1991, X% of samples in the Wisconsin breast cancer collection were malignant."** Should they report that pooled figure, show collection groups alongside it, or pause? Find out, and show the evidence.
+![A real breast cancer slide from TCGA (left) beside an AI model's map of where immune cells are likely (right)](assets/hero_tissue_ai.jpg)
 
-**Start here:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/starter.ipynb) or open [`starter/starter.ipynb`](starter/starter.ipynb). It loads the data, explains what one row means, and draws a first chart in under a minute.
+**Left:** a real H&E slide from TCGA (patient TCGA-OL-A5RW). **Right:** a published AI model's estimate of where tumor-infiltrating lymphocytes are. Its highest patch probability is 0.63, and at its own threshold it calls just one patch positive. **Is that result right, and how would anyone check?** That's what you'll build tools for.
 
-*This is a data-readiness exercise. Classifiers, diagnosis and clinical claims are out of scope.*
+<p>
+<a href="data/README.md"><img alt="Explore the data" src="https://img.shields.io/badge/%E2%91%A0%20Explore%20the%20data-0b6e99?style=for-the-badge"></a>
+<a href="products/README.md"><img alt="Pick a mission" src="https://img.shields.io/badge/%E2%91%A1%20Pick%20a%20mission-7a3e9d?style=for-the-badge"></a>
+<a href="https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/tcga_starter.ipynb"><img alt="Run the starter" src="https://img.shields.io/badge/%E2%91%A2%20Run%20the%20starter-1a7f37?style=for-the-badge"></a>
+</p>
 
-| Track | Brief | What you build | Need inspiration? |
-|---|---|---|---|
-| **Cohort Firewall** | [question card](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it | [5 product ideas](track1-cohort-firewall/ideas.md) |
-| **Evidence Navigator** | [roles and scenario](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision | [5 product ideas](track2-evidence-navigator/ideas.md) |
+- **Explore the data:** seven data packs (tumor molecular data, tissue images, CT scans, cell lines, trial records) plus a 30-minute warm-up. The menu shows included starters, source downloads and viewer links.
+- **Pick a mission:** six featured products and optional custom builds, across two tracks.
+- **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser.
 
-Build anything you want, but give judges **one result they can verify** and **one limitation they can inspect**.
+## Pick a user, build one workflow
+| Track | What it does | Featured products |
+|---|---|---|
+| **Cohort Firewall** | Catches what could make a result unreliable | [Cohort Control Tower](products/cohort-control-tower.md) · [Cohort Studio](products/cohort-studio.md) |
+| **Evidence Navigator** | Helps someone investigate a result and decide what to do | [Multimodal Case Room](products/multimodal-case-room.md) · [Evidence Copilot](products/evidence-copilot.md) · [Research Claim Auditor](products/research-claim-auditor.md) · [Repair Review Desk](products/repair-review-desk.md) |
 
-The full rules and each track's scoring rubric are in the challenge package. Coming next: a preview of the [OncoSys Cancer Data Lab](CANCER_DATA_LAB_PREVIEW.md) (not part of this weekend's scoring).
+Build a web app, an AI agent, a visual workflow, or a tool that plugs into a notebook. You can also combine two products or [pitch your own](products/README.md#pitch-your-own-lighter-support).
 
-## The data
-**Breast Cancer Wisconsin (Original)**, UCI Machine Learning Repository, frozen for this event as `v1.0.0`. Each row is one sample from a fine-needle aspirate of a breast mass, collected 1989–1991. An examiner scored nine cell features from 1 to 10, and each sample is labelled benign or malignant.
+**The bar:** a judge can use your workflow without you narrating, and it shows **one result they can verify** and **one limitation they can inspect.**
 
+**The finale:** a Cohort Control Tower catches a silent change in a new data release, and a different team's Repair Review Desk receives the findings and makes the review decision, live, through the [shared format](format/README.md).
+
+## The data packs
+| Pack | One record is… | Status |
+|---|---|---|
+| [TCGA breast cancer](data/tcga-brca/README.md) *(core)* | A tumor sample with clinical, survival, mutation, copy number, RNA and protein data, plus slide links | Ready |
+| [Pathology: PathMNIST](data/pathmnist/README.md) | A labelled colorectal tissue patch | Ready |
+| [Molecular + imaging: CPTAC](data/cptac/README.md) | A lung, colon or kidney cancer case | Ready: protein, slides and CT links |
+| [Imaging: LIDC-IDRI](data/lidc-idri/README.md) | A chest CT with radiologists' nodule marks | Ready |
+| [Prediction: DepMap](data/depmap/README.md) | A cancer cell line | Ready |
+| [Trial records: ClinicalTrials.gov](data/clinical-trials/README.md) | A dated trial record + fictional cases | Ready for practice |
+| [Advanced: CAMELYON17](data/camelyon17/README.md) | A lymph-node slide from one of 5 hospitals | Ready (source-linked) |
+
+**Only join records where a documented match exists.** Tissue patches, cell lines, tumor samples and CT scans describe different things. See [the joining rule](data/README.md#the-joining-rule).
+
+## What's in this repo
 | Path | What it is |
 |---|---|
-| `data/wisconsin_readable.csv` | **Start with this one.** The same 699 rows with column names, empty cells for missing values, a `source_row` link back to the official file, and **derived** collection groups (reconstructed from UCI's documentation, not recorded in the source data) |
-| `data/data_dictionary.csv` | What every column means and where it came from |
-| `data/breast-cancer-wisconsin.data` | **Official file**, exactly as UCI publishes it: no header row; `?` means missing |
-| `data/breast-cancer-wisconsin.names` | UCI's documentation. Read sections 4, 7 and 8. |
-| `SHA256SUMS` | Checksums for everything in `data/` |
-| `practice/` | Two practice cases for testing how your tool handles provenance. Not for judged results. |
-| `examples/` | An optional shared findings format and a worked example |
-| `SUBMISSION_CHECKLIST.md` | What to check before the code freeze |
-
-**Official vs readable:** the readable CSV is a convenience copy. Your results should still name the official file and its checksum, and use `source_row` to show which source rows they rest on.
+| `starter/tcga_starter.ipynb` | The 15-minute starter |
+| `products/` | Six featured product briefs, practice inputs, and pitch-your-own ideas |
+| `data/` | Seven data packs: each with a README, sources and checksums, fetch script, and manifests |
+| `assets/` | The challenge page image |
+| `format/` | Shared findings format v0.2, validator and reference output |
+| `warmup/wisconsin/` | Optional 30-minute warm-up on a small dataset |
+| [`RULES.md`](RULES.md) · [`DATA_LICENSES.md`](DATA_LICENSES.md) | What's allowed, and how to credit the data |
+| [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | What to check before the code freeze |
 
 ## Run it on your computer
 ```bash
@@ -40,44 +59,27 @@ git clone https://github.com/disleveK/oncosys-hackathon-challenge.git
 cd oncosys-hackathon-challenge
 ```
 ```bash
-sha256sum -c SHA256SUMS
-```
-On macOS, use `shasum -a 256 -c SHA256SUMS`.
-```bash
-pip install pandas matplotlib jupyter
+pip install -r requirements.txt
 ```
 ```bash
-jupyter notebook starter/starter.ipynb
+python data/tcga-brca/fetch.py
 ```
-
-## Practice cases
-Test your tool on [`practice/`](practice/README.md) before Saturday:
-- **P1:** a sorted copy where collection groups can be recovered.
-- **P2:** an extract where the evidence to recover them is missing, so **Insufficient Evidence** is the right answer for group-level questions.
-
-The judging cases are different and stay private.
-
-## Shared findings format (optional)
-A Cohort Firewall tool produces findings; an Evidence Navigator tool turns findings into a decision a reviewer can trace. If you'd like your tool to work with others, write or read [`examples/findings.schema.json`](examples/findings.schema.json). See the [worked example](examples/findings.example.json). It isn't required for judging.
-
-## Before you submit
-Work through [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md). The code freeze is **Saturday, November 14, 2:15 PM ET**.
+```bash
+jupyter notebook starter/tcga_starter.ipynb
+```
 
 ## Recommended tools
-
 Use any stack. Start with the smallest toolset that lets someone else rerun your work. No paid account, hosted app, or AI coding assistant is required.
 
 | Task | Optional tools | What to practice |
 |---|---|---|
-| Read and check the data | [pandas](https://pandas.pydata.org/), [Polars](https://docs.pola.rs/), or [DuckDB](https://duckdb.org/). For repeatable checks, try [Pandera](https://pandera.readthedocs.io/) or [Great Expectations](https://docs.greatexpectations.io/). [ydata-profiling](https://docs.profiling.ydata.ai/) can help with initial exploration. | Preserve the original source row number before sorting or filtering. Record the dataset version, checks run, and affected rows or fields. Treat a profile report as a starting point, not a verdict. |
-| Compare figures | A notebook or SQL is enough. A chi-square test is optional if its assumptions are justified. | Compare pooled and group-level figures with denominators. Test whether reasonable choices about duplicates and missing values change the conclusion. Don't infer demographic bias from fields that aren't present. |
-| Build a reviewer interface | [Streamlit](https://docs.streamlit.io/get-started) or [Gradio](https://www.gradio.app/docs). Try [axe-core](https://github.com/dequelabs/axe-core) or [Lighthouse](https://developer.chrome.com/docs/lighthouse/) for accessibility checks. | Make it possible to trace a headline number to its evidence and reach a decision without the presenter. Test keyboard navigation and whether labels and verdicts make sense without color. |
-| Document provenance | A Markdown evidence log or JSON record works. [W3C PROV](https://www.w3.org/TR/prov-overview/) is optional background. | For each claim, record the source file and version, row or group selection, calculation, limitation, and who should review it. Collection groups are derived from UCI documentation, not recorded in the raw file. |
-| Check for secrets | [Gitleaks](https://github.com/gitleaks/gitleaks), manually or in pre-commit. | Before submitting, check the repository for credentials, tokens, private URLs, and restricted files. |
+| Read and check the data | [pandas](https://pandas.pydata.org/), [Polars](https://docs.pola.rs/), or [DuckDB](https://duckdb.org/). For repeatable checks, try [Pandera](https://pandera.readthedocs.io/) or [Great Expectations](https://docs.greatexpectations.io/). [ydata-profiling](https://docs.profiling.ydata.ai/) can help with initial exploration. | Keep sample and patient IDs separate. Record the release, checksums, checks run, and affected samples. Treat a profile report as a starting point, not a verdict. |
+| Compare figures | A notebook or SQL is enough. | Compare figures with their denominators. Test whether reasonable choices about which samples to include change the conclusion. |
+| Work with slides | NCI Imaging Data Commons viewer links in `slide_manifest.csv`; [`idc-index`](https://pypi.org/project/idc-index/) to download | Distinguish diagnostic from frozen slides. Link a slide to a case only when its barcode matches. |
+| Build a reviewer interface | [Streamlit](https://docs.streamlit.io/get-started) or [Gradio](https://www.gradio.app/docs). Try [axe-core](https://github.com/dequelabs/axe-core) or [Lighthouse](https://developer.chrome.com/docs/lighthouse/) for accessibility checks. | Make it possible to trace a headline number to its evidence and reach a decision without the presenter. Test keyboard navigation and whether labels make sense without color. |
+| Use AI responsibly | Any LLM or a local model. Users supply their own key; never commit one. | Let the AI run real queries rather than answer from memory. Show its sources. Make it say when the data can't answer. |
+| Document provenance | The [shared format](format/README.md), a Markdown evidence log, or [W3C PROV](https://www.w3.org/TR/prov-overview/) as background | For each claim, record the release, samples, calculation, limitation, and who should review it. |
+| Check for secrets | [Gitleaks](https://github.com/gitleaks/gitleaks), manually or in pre-commit | Before submitting, check for credentials, tokens, private URLs and restricted files. |
 
 ## Source and citation
-Collected by Dr. William H. Wolberg, University of Wisconsin Hospitals, Madison, 1989–1991; donated to UCI on 15 July 1992.
-Cite: Wolberg, W. (1990). *Breast Cancer Wisconsin (Original)* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5HP4Z
-Dataset license: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/), as listed on the [UCI dataset page](https://archive.ics.uci.edu/dataset/15). This license statement applies to the UCI dataset. The starter notebook derives collection groups from UCI’s documented row boundaries; those labels are not fields in the source data.
-
-The data is de-identified but patient-derived. Don't attempt to re-identify anyone or link it to other sources.
+TCGA data from the UCSC Xena TCGA hub and NCI Imaging Data Commons; full credits in [`DATA_LICENSES.md`](DATA_LICENSES.md). The data is de-identified but patient-derived: research use only, no re-identification, no clinical claims.
