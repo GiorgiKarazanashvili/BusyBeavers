@@ -9,8 +9,8 @@ A data-use reviewer wants to publish: **"Across 1989–1991, X% of samples in th
 
 | Track | Brief | What you build | Need inspiration? |
 |---|---|---|---|
-| **Cohort Firewall** | [question card](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it | [5 project ideas](track1-cohort-firewall/ideas.md) |
-| **Evidence Navigator** | [roles and scenario](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision | [5 project ideas](track2-evidence-navigator/ideas.md) |
+| **Cohort Firewall** | [question card](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it | [5 product ideas](track1-cohort-firewall/ideas.md) |
+| **Evidence Navigator** | [roles and scenario](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision | [5 product ideas](track2-evidence-navigator/ideas.md) |
 
 Build anything you want, but give judges **one result they can verify** and **one limitation they can inspect**.
 

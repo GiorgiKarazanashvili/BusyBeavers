@@ -33,4 +33,4 @@ Your tool must end with a summary recording the chosen option, the reasons, the 
 
 Judges will introduce a new user role or a conflicting finding. Your tool should handle it without the presenter explaining.
 
-**Not sure what to build?** See [five project ideas](ideas.md).
+**Not sure what to build?** See [five product ideas](ideas.md): tools, platforms and agents you can ship this weekend.
