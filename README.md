@@ -17,21 +17,47 @@ The full rules and the scoring rubric for each track are in the challenge packag
 ## Files
 | Path | What it is |
 |---|---|
-| `data/breast-cancer-wisconsin.data` | 699 rows, no header row; `?` means missing |
+| `data/breast-cancer-wisconsin.data` | **Official data.** 699 rows, no header row; `?` means missing |
 | `data/breast-cancer-wisconsin.names` | UCI's documentation. Read sections 4, 7 and 8. |
-| `SHA256SUMS` | Checksums. Verify before you start. |
+| `SHA256SUMS` | Checksums for the official files. Verify before you start. |
 | `starter/starter.ipynb` | Loads the data, verifies checksums and derives collection groups |
+| `practice/` | Two practice cases for testing how your tool handles provenance. Not for judged results. |
+| `examples/` | An optional shared findings format and a worked example |
+| `SUBMISSION_CHECKLIST.md` | What to check before the code freeze |
 
 ## Quick start
+**Option A — your computer**
+```bash
+git clone https://github.com/disleveK/oncosys-hackathon-challenge.git
+```
+```bash
+cd oncosys-hackathon-challenge
+```
 ```bash
 sha256sum -c SHA256SUMS
 ```
+On macOS, use `shasum -a 256 -c SHA256SUMS`.
 ```bash
 pip install pandas jupyter
 ```
 ```bash
 jupyter notebook starter/starter.ipynb
 ```
+
+**Option B — no install:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/starter.ipynb). The notebook downloads and verifies the data itself.
+
+## Practice cases
+Test your tool on [`practice/`](practice/README.md) before Saturday:
+- **P1:** a sorted copy where collection groups can be recovered.
+- **P2:** an extract where the evidence to recover them is missing, so **Insufficient Evidence** is the right answer for group-level questions.
+
+The judging cases are different and stay private.
+
+## Shared findings format (optional)
+A Cohort Firewall tool produces findings; an Evidence Navigator tool turns findings into a decision a reviewer can trace. If you'd like your tool to work with others, write or read [`examples/findings.schema.json`](examples/findings.schema.json). See the [worked example](examples/findings.example.json). It isn't required for judging.
+
+## Before you submit
+Work through [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md). The code freeze is **Saturday, November 14, 2:15 PM ET**.
 
 ## Recommended tools
 
