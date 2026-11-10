@@ -33,6 +33,18 @@ pip install pandas jupyter
 jupyter notebook starter/starter.ipynb
 ```
 
+## Recommended tools
+
+Use any stack. Start with the smallest toolset that lets someone else rerun your work. No paid account, hosted app, or AI coding assistant is required.
+
+| Task | Optional tools | What to practice |
+|---|---|---|
+| Read and check the data | [pandas](https://pandas.pydata.org/), [Polars](https://docs.pola.rs/), or [DuckDB](https://duckdb.org/). For repeatable checks, try [Pandera](https://pandera.readthedocs.io/) or [Great Expectations](https://docs.greatexpectations.io/). [ydata-profiling](https://docs.profiling.ydata.ai/) can help with initial exploration. | Preserve the original source row number before sorting or filtering. Record the dataset version, checks run, and affected rows or fields. Treat a profile report as a starting point, not a verdict. |
+| Compare figures | A notebook or SQL is enough. A chi-square test is optional if its assumptions are justified. | Compare pooled and group-level figures with denominators. Test whether reasonable choices about duplicates and missing values change the conclusion. Don't infer demographic bias from fields that aren't present. |
+| Build a reviewer interface | [Streamlit](https://docs.streamlit.io/get-started) or [Gradio](https://www.gradio.app/docs). Try [axe-core](https://github.com/dequelabs/axe-core) or [Lighthouse](https://developer.chrome.com/docs/lighthouse/) for accessibility checks. | Make it possible to trace a headline number to its evidence and reach a decision without the presenter. Test keyboard navigation and whether labels and verdicts make sense without color. |
+| Document provenance | A Markdown evidence log or JSON record works. [W3C PROV](https://www.w3.org/TR/prov-overview/) is optional background. | For each claim, record the source file and version, row or group selection, calculation, limitation, and who should review it. Collection groups are derived from UCI documentation, not recorded in the raw file. |
+| Check for secrets | [Gitleaks](https://github.com/gitleaks/gitleaks), manually or in pre-commit. | Before submitting, check the repository for credentials, tokens, private URLs, and restricted files. |
+
 ## Source and citation
 Collected by Dr. William H. Wolberg, University of Wisconsin Hospitals, Madison, 1989–1991; donated to UCI on 15 July 1992.
 Cite: Wolberg, W. (1990). *Breast Cancer Wisconsin (Original)* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5HP4Z
