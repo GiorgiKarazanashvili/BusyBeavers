@@ -23,3 +23,5 @@ For each verdict, show the checks performed, the fields and rows used, the decis
 ## Expect a change at judging
 
 Judges will give your tool a changed research question or a changed version of the file. It should re-check rather than repeat its earlier answer.
+
+**Not sure what to build?** See [five project ideas](ideas.md).

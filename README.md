@@ -7,10 +7,12 @@ A data-use reviewer wants to publish: **"Across 1989–1991, X% of samples in th
 
 *This is a data-readiness exercise. Classifiers, diagnosis and clinical claims are out of scope.*
 
-| Track | Brief | What you build |
-|---|---|---|
-| **Cohort Firewall** | [`track1-cohort-firewall/`](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it |
-| **Evidence Navigator** | [`track2-evidence-navigator/`](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision |
+| Track | Brief | What you build | Need inspiration? |
+|---|---|---|---|
+| **Cohort Firewall** | [question card](track1-cohort-firewall/question_card.md) | A tool that audits the data for the question and returns Ready, Conditional, Blocked or Insufficient Evidence, with the evidence behind it | [5 project ideas](track1-cohort-firewall/ideas.md) |
+| **Evidence Navigator** | [roles and scenario](track2-evidence-navigator/user_roles_and_scenario.md) | An interactive tool that helps four kinds of users understand the findings and make the publishing decision | [5 project ideas](track2-evidence-navigator/ideas.md) |
+
+Build anything you want, but give judges **one result they can verify** and **one limitation they can inspect**.
 
 The full rules and each track's scoring rubric are in the challenge package. Coming next: a preview of the [OncoSys Cancer Data Lab](CANCER_DATA_LAB_PREVIEW.md) (not part of this weekend's scoring).
 
