@@ -1,21 +1,30 @@
-# Data
+# Explore the data
 
-Each dataset lives in its own folder with the same five pieces, so every source is documented, reproducible and checkable the same way.
+The packs are a menu. Start small; larger datasets and heavier models are optional.
 
-| Folder | Dataset | Status |
-|---|---|---|
-| [`tcga-brca/`](tcga-brca/README.md) | TCGA breast cancer: clinical, survival, mutations, copy number, RNA, protein, pathology slides | Ready |
-| [`../warmup/wisconsin/`](../warmup/wisconsin/README.md) | Breast Cancer Wisconsin (Original): a 30-minute warm-up exercise | Ready |
+| Pack | One record is… | Laptop download | What it opens up | Status |
+|---|---|---|---|---|
+| **[TCGA breast cancer](tcga-brca/README.md)** *(core: featured missions)* | A tumor sample with clinical, survival, mutation, copy number, RNA and protein data, plus slide links | ~70 MB | Cohort tools, release monitors, case workspaces, evidence assistants | **Ready** |
+| **[Pathology: PathMNIST](pathmnist/README.md)** *(best first image experience)* | A labelled colorectal tissue patch | Smallest version by default (size confirmed at first download) | Tissue classification, visual search, image-quality checks, review queues | **Ready to test:** publisher checksums pinned; first real download pending |
+| **[Molecular + imaging: CPTAC](cptac/README.md)** | A lung, colon or kidney cancer case | Slide and CT manifests: < 1 MB | Case workspaces linked to tissue; RNA vs protein (when added) | **Slides and CT ready; protein pending** |
+| **[Imaging: LIDC-IDRI](lidc-idri/README.md)** | A chest CT with up to 4 radiologists' nodule marks | Optional 34 to 230 MB exercise | Compare model output with reviewer annotations | **Ready** |
+| **[Prediction: DepMap](depmap/README.md)** | A cancer cell line | (planned) | Predict sensitivity to a gene knockout; explain failures | Planned |
+| **[Trial records: ClinicalTrials.gov](clinical-trials/README.md)** | A dated version of a trial's eligibility rules + fictional cases | (planned) | Compare eligibility versions; who moves in or out | Planned |
+| **[Advanced: CAMELYON17](camelyon17/README.md)** | A lymph-node whole-slide image from one of 5 hospitals | Labels only; slides source-linked | Test performance across hospitals | **Ready (source-linked)** |
+| **[Warm-up: Wisconsin](../warmup/wisconsin/README.md)** | A breast-mass sample scored 1 to 10 on nine features | < 1 MB | A 30-minute tabular practice | **Ready** |
 
-## How to add a dataset
-1. **Make a folder:** `data/<dataset-name>/`.
-2. **`README.md`:** what one row means, how the files connect, coverage numbers, license, citation, and what the data can't support.
-3. **`sources.csv`:** one row per file with `file, layer, source_url, sha256, bytes, license, retrieved`. Fill `sha256` from a download you checked yourself.
-4. **`fetch.py`:** downloads each file into `data/<dataset-name>/raw/` and stops if a checksum doesn't match. Copy `tcga-brca/fetch.py`; it only reads `sources.csv`. Add `data/<dataset-name>/raw/` to `.gitignore`.
-5. **Small manifests, committed:** tables that link the pieces together (samples, images, versions), under a few MB each. Generate them with a script and record how.
+## The joining rule
+These packs describe **different things**: tissue patches, cell lines, tumor samples, CT scans, trial records. **Only join records where a documented match exists**, such as TCGA barcodes within TCGA, or CPTAC case IDs with a verified mapping. Never join across packs because IDs or labels look similar. When a match is missing, show the gap: that's a finding, not a failure.
 
-## Rules for what goes in the repository
-- **Commit** only files that are small (under about 50 MB) **and** whose license clearly allows redistribution, such as CC0 or CC BY with attribution.
-- **Fetch, don't commit,** anything large or where redistribution isn't confirmed. Pin its checksum in `sources.csv`.
-- **Never** commit controlled-access data, non-commercial-licensed data, credentials, or anything with personal identifiers.
-- **Images** stay in the cloud: link to a viewer, or list them in a manifest that `idc-index` can download.
+## How every pack is built
+Each folder has the same pieces, so every source is documented and checkable the same way:
+1. **`README.md`:** what one record means, how files connect, coverage, license, citation, and what the data can't support.
+2. **`sources.csv`:** each file's URL, checksum, size, license and retrieval date.
+3. **A fetch script** that downloads into `raw/` (not committed) and stops if a checksum doesn't match.
+4. **Small manifests, committed:** tables that link the pieces (samples, images, versions), with viewer links where images stay at the source.
+
+## Adding a pack
+Make `data/<pack>/` with the four pieces above, and add `data/<pack>/raw/` to `.gitignore`.
+- **Commit** only small files whose license clearly allows redistribution, such as CC0 or CC BY with attribution.
+- **Fetch, don't commit,** anything large or where redistribution isn't confirmed.
+- **Never** commit controlled-access data, non-commercial-licensed data, credentials, or personal identifiers.

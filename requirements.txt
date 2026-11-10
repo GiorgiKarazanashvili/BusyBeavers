@@ -2,4 +2,8 @@ pandas>=2.0
 matplotlib>=3.7
 jupyter
 jsonschema>=4.0
-idc-index  # optional: download slides
+# image packs
+numpy
+pillow
+scikit-learn
+idc-index  # slides, CT and annotations from NCI Imaging Data Commons

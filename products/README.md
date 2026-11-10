@@ -20,13 +20,15 @@ Pick a user. Build **one workflow that user can finish**. Demo it on real TCGA b
 **Finale chain:** Cohort Control Tower → Repair Review Desk. One team catches a silent change in a release; another team's product receives the findings and makes a review decision. Both use the [shared format](../format/README.md).
 
 ## Pitch your own (lighter support)
-These need data you source yourself from public, permissively licensed sites. Tell organizers your data source at kickoff.
+These use the other [data packs](../data/README.md). They have starter data and documentation but no organizer answer key, so judges score them on the rubric alone. Tell organizers your product and pack at kickoff.
 
-| Track | Product | Idea | Public data to use |
+| Track | Product | Idea | Data pack |
 |---|---|---|---|
-| Firewall | Model Crash Lab | Stress-test a tissue classifier on altered images and find its worst failure | PathMNIST (`pip install medmnist`, CC BY 4.0; use the 224-pixel version) |
-| Firewall | Benchmark Builder | An evaluation service for cell-line predictions that catches leaky splits | Broad DepMap (check its license first) |
-| Firewall | Amendment Replay Engine | Replay a fictional cohort against two versions of trial eligibility rules | ClinicalTrials.gov record history, with **fictional** cases only |
-| Navigator | Pathology Search and Review | Find similar tissue patches and queue uncertain predictions for review | PathMNIST, as above |
+| Firewall | Model Crash Lab | Stress-test a tissue classifier on altered images and find its worst failure | [PathMNIST](../data/pathmnist/README.md): use the baseline's predictions, `--size 64` or more for blur and color tests; [CAMELYON17](../data/camelyon17/README.md) for testing across hospitals (advanced) |
+| Firewall | Benchmark Builder | An evaluation service for cell-line predictions that catches leaky splits | [DepMap](../data/depmap/README.md) (planned) |
+| Firewall | Amendment Replay Engine | Replay a fictional cohort against two versions of trial eligibility rules | [ClinicalTrials.gov](../data/clinical-trials/README.md) (planned), **fictional** cases only |
+| Navigator | Pathology Search and Review | Find similar tissue patches and queue uncertain predictions for review | [PathMNIST](../data/pathmnist/README.md): `review_queue.csv` from the baseline is a ready-made starting queue |
+| Navigator | CT Review Viewer | Compare a model's nodule output with each radiologist's marks | [LIDC-IDRI](../data/lidc-idri/README.md) |
+| Navigator | Multimodal Case Room, CPTAC edition | The featured Case Room on lung, colon or kidney cases | [CPTAC](../data/cptac/README.md) slides and CT; molecular data when added |
 
 Or pitch something else entirely: name the user, the workflow, and how it proves its track.

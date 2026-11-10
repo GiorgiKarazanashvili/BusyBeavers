@@ -1,9 +1,18 @@
 # OncoSys Cancer AI Lab: Healthcare AI Hackathon
 
-## Does the protein agree with the pathology report?
-Breast tumors are tested for estrogen receptor (ER) in the clinic, and TCGA also measured the ER-alpha protein directly. Of 1,101 primary tumors, only 535 have every data layer, and each join changes who is in the cohort. **Real cancer evidence comes from different sources that don't always line up. Build the tools that catch it and help people decide what to do.**
+![A real breast cancer slide from TCGA (left) beside an AI model's map of where immune cells are likely (right)](assets/hero_tissue_ai.jpg)
 
-**Start here:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/tcga_starter.ipynb) or open [`starter/tcga_starter.ipynb`](starter/tcga_starter.ipynb). In 15 minutes it downloads the data, explains what one row means, shows how the cohort shrinks with each join, and opens a pathology slide in your browser.
+**Left:** a real H&E slide from TCGA (patient TCGA-OL-A5RW). **Right:** a published AI model's estimate of where tumor-infiltrating lymphocytes are. Its highest patch probability is 0.63, and at its own threshold it calls just one patch positive. **Is that result right, and how would anyone check?** That's what you'll build tools for.
+
+<p>
+<a href="data/README.md"><img alt="Explore the data" src="https://img.shields.io/badge/%E2%91%A0%20Explore%20the%20data-0b6e99?style=for-the-badge"></a>
+<a href="products/README.md"><img alt="Pick a mission" src="https://img.shields.io/badge/%E2%91%A1%20Pick%20a%20mission-7a3e9d?style=for-the-badge"></a>
+<a href="https://colab.research.google.com/github/disleveK/oncosys-hackathon-challenge/blob/main/starter/tcga_starter.ipynb"><img alt="Run the starter" src="https://img.shields.io/badge/%E2%91%A2%20Run%20the%20starter-1a7f37?style=for-the-badge"></a>
+</p>
+
+- **Explore the data:** seven data packs (tumor molecular data, tissue images, CT scans, cell lines, trial records) plus a 30-minute warm-up. Each starts with a small laptop download; larger datasets and heavier models are optional.
+- **Pick a mission:** six featured products and four more to pitch, across two tracks.
+- **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser.
 
 ## Pick a user, build one workflow
 | Track | What it does | Featured products |
@@ -17,21 +26,26 @@ Build a web app, an AI agent, a visual workflow, or a tool that plugs into a not
 
 **The finale:** a Cohort Control Tower catches a silent change in a new data release, and a different team's Repair Review Desk receives the findings and makes the review decision, live, through the [shared format](format/README.md).
 
-## The data: TCGA breast cancer, one patient, many views
-| Layer | Coverage |
-|---|---|
-| Clinical records (194 fields) and curated survival | 1,101 patients, 1,247 samples |
-| Mutations, copy number, RNA, protein | 747 to 1,218 samples, depending on the layer |
-| Pathology slides, viewable in the browser | 3,111 slides (1,133 diagnostic, 1,978 frozen) |
+## The data packs
+| Pack | One record is… | Status |
+|---|---|---|
+| [TCGA breast cancer](data/tcga-brca/README.md) *(core)* | A tumor sample with clinical, survival, mutation, copy number, RNA and protein data, plus slide links | Ready |
+| [Pathology: PathMNIST](data/pathmnist/README.md) | A labelled colorectal tissue patch | Ready to test |
+| [Molecular + imaging: CPTAC](data/cptac/README.md) | A lung, colon or kidney cancer case | Slides and CT ready; protein pending |
+| [Imaging: LIDC-IDRI](data/lidc-idri/README.md) | A chest CT with radiologists' nodule marks | Ready |
+| [Prediction: DepMap](data/depmap/README.md) | A cancer cell line | Planned |
+| [Trial records: ClinicalTrials.gov](data/clinical-trials/README.md) | A dated trial record + fictional cases | Planned |
+| [Advanced: CAMELYON17](data/camelyon17/README.md) | A lymph-node slide from one of 5 hospitals | Ready (source-linked) |
 
-Details, IDs and download: [`data/tcga-brca/`](data/tcga-brca/README.md). Adding a dataset: [`data/README.md`](data/README.md).
+**Only join records where a documented match exists.** Tissue patches, cell lines, tumor samples and CT scans describe different things. See [the joining rule](data/README.md#the-joining-rule).
 
 ## What's in this repo
 | Path | What it is |
 |---|---|
 | `starter/tcga_starter.ipynb` | The 15-minute starter |
 | `products/` | Six featured product briefs, practice inputs, and pitch-your-own ideas |
-| `data/tcga-brca/` | Fetch script with frozen checksums, sample and slide manifests, reference analyses, release generator |
+| `data/` | Seven data packs: each with a README, sources and checksums, fetch script, and manifests |
+| `assets/` | The challenge page image |
 | `format/` | Shared findings format v0.2, validator and reference output |
 | `warmup/wisconsin/` | Optional 30-minute warm-up on a small dataset |
 | [`RULES.md`](RULES.md) · [`DATA_LICENSES.md`](DATA_LICENSES.md) | What's allowed, and how to credit the data |

@@ -5,3 +5,7 @@ __pycache__/
 judges/
 data/tcga-brca/raw/
 data/tcga-brca/releases/
+data/pathmnist/raw/
+data/pathmnist/gallery/
+data/pathmnist/outputs/
+data/lidc-idri/raw/
