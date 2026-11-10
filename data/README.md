@@ -5,7 +5,7 @@ Each dataset lives in its own folder with the same five pieces, so every source 
 | Folder | Dataset | Status |
 |---|---|---|
 | [`tcga-brca/`](tcga-brca/README.md) | TCGA breast cancer: clinical, survival, mutations, copy number, RNA, protein, pathology slides | Ready |
-| (root files) | Breast Cancer Wisconsin (Original): warm-up exercise | Ready |
+| [`../warmup/wisconsin/`](../warmup/wisconsin/README.md) | Breast Cancer Wisconsin (Original): a 30-minute warm-up exercise | Ready |
 
 ## How to add a dataset
 1. **Make a folder:** `data/<dataset-name>/`.

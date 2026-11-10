@@ -2,29 +2,28 @@
 
 Submit through the judging form by the **code freeze: Saturday, November 14, 2:15 PM ET**.
 
-## Required
+## Everyone
 - [ ] **Repository** is accessible to the judges, and the submitted commit is the one you'll demo.
-- [ ] **README** has a short project summary, your track, team members, and the exact setup and run steps.
-- [ ] **Clean start works:** a teammate cloned the repo into a fresh folder and ran it from the README alone.
-- [ ] **Official data:** you use `data/breast-cancer-wisconsin.data` and verify it against `SHA256SUMS`. No other datasets in the judged result.
-- [ ] **Short demo video** link is in the README.
-- [ ] **Evidence:** each main conclusion links to the check, fields and rows behind it, or is clearly marked as an interpretation.
-- [ ] **Assumptions stated:** collection groups are derived from UCI's documentation, not recorded in the data.
-- [ ] **Human review:** the tool shows when a person must review a result before it's used.
-- [ ] **Out of scope:** no classifier, diagnosis, risk score, or clinical claim.
-- [ ] **No secrets:** no credentials, tokens, private links or personal information. Running Gitleaks is a quick way to check.
-- [ ] **Third-party code:** components and their licenses are listed.
+- [ ] **README** names your product, track, **user** and the **one workflow** they finish, plus team members and exact setup and run steps.
+- [ ] **Clean start works:** a teammate cloned the repo into a fresh folder, ran `fetch.py`, and ran your tool from the README alone.
+- [ ] **Event data:** judged results use the frozen TCGA-BRCA release (checksums match `sources.csv`). Any extra data is public, permissively licensed and listed.
+- [ ] **One result a judge can verify:** they can trace it to samples, files and a calculation, and reproduce it.
+- [ ] **One limitation a judge can inspect:** visible in the product, not only in the README.
+- [ ] **Human review:** the tool shows when a person must check a result before it's used.
+- [ ] **Out of scope:** no diagnosis, treatment advice, risk score or clinical claim.
+- [ ] **No secrets:** no keys, tokens or private links. Running Gitleaks is a quick way to check.
+- [ ] **Short demo video** link in the README.
+- [ ] **Third-party code** and its licenses listed.
 
-## Track 1 · Cohort Firewall
-- [ ] Returns one verdict: Ready, Conditional, Blocked or Insufficient Evidence.
-- [ ] Re-checks when the question or file changes. Test it on `practice/`.
-- [ ] Gives specific next steps for a Conditional or Blocked result.
+## Cohort Control Tower and Repair Review Desk
+- [ ] Your output (Control Tower) or decisions (Repair Review Desk) pass `python format/validate.py`.
+- [ ] You tested against `format/examples/control-tower-practice-B.json` or a release you built with `make_release.py`.
 
-## Track 2 · Evidence Navigator
-- [ ] A judge can finish the decision scenario without the presenter's help.
-- [ ] Each of the four roles sees the same underlying numbers.
-- [ ] Ends with a summary: chosen option, reasons, limitations, and who reviews it.
-- [ ] Usable with a keyboard, and readable without relying on color.
+## AI features
+- [ ] The AI runs real queries or reads real files and shows its sources; it doesn't answer from memory.
+- [ ] It says clearly when the data can't answer.
+- [ ] It runs with a local model or a user-supplied key.
 
-## Optional
-- [ ] Output in the shared findings format: `examples/findings.schema.json`.
+## Research models (if you trained one)
+- [ ] Held-out evaluation split by patient, slide or cell line.
+- [ ] A short model card: data, split, results, and where it fails.

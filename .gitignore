@@ -4,3 +4,4 @@ __pycache__/
 # Judge-only material never goes in this repo
 judges/
 data/tcga-brca/raw/
+data/tcga-brca/releases/
