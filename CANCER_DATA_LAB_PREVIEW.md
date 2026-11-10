@@ -1,27 +1,41 @@
 # Preview: the OncoSys Cancer Data Lab
 
-**This is a preview. It isn't part of this weekend's scoring, and the data packs below aren't available to download yet.** This weekend's challenge uses the Wisconsin data in this repository.
+**This is a preview. It isn't part of this weekend's scoring, and the data kits below aren't available to download yet.** This weekend's challenge uses the Wisconsin data in this repository.
 
-## The idea
-Real cancer research means connecting different kinds of evidence (proteins, RNA, images, trial rules) and working out what those connections actually support. The Cancer Data Lab will give you a shared starting kit and let you choose what to build.
+## How it works
+Pick a user. Build **one workflow that user can finish**, and demo it on real research data. Build a web app, an AI agent, a visual workflow, or a tool that plugs into an existing notebook.
 
-**The one rule:** build anything you want, but give a judge **one result they can verify** and **one limitation they can inspect**. Notebooks, dashboards, command-line tools, AI agents and visual workflows are all welcome.
+- **Cohort Firewall** catches what could make a result unreliable.
+- **Evidence Navigator** helps someone investigate the result and decide what to do.
 
-## Planned mission packs
-| Mission | Data (planned) | What you could build |
+**The bar:** a judge can use your workflow without you narrating it, and it shows one result they can verify and one limitation they can inspect.
+
+Each product will come with a small starter dataset, a runnable example, sample model outputs (so you don't have to train anything), and a shared format for handing results to other teams' products. Build one product, combine two, or pitch your own.
+
+## Ten products a cancer research team would want
+
+### Cohort Firewall
+| Product | User and workflow | Planned data |
 |---|---|---|
-| **Protein evidence** | CPTAC pan-cancer proteomics, starting with lung, colorectal and kidney cancer, with matched RNA where verified | An explorer that shows where RNA and protein disagree, and what that does to a conclusion |
-| **Cell-line prediction** | Broad DepMap expression, CRISPR and drug-response data | A model that ranks cell lines by sensitivity, tested on held-out lines. A cell-line result says nothing by itself about patients. |
-| **Imaging** | CPTAC lung adenocarcinoma radiology and pathology images (Imaging Data Commons) | A reviewer that opens the tissue image behind a finding |
-| **Trial rules** | ClinicalTrials.gov eligibility criteria and record history, with fictional cases | A tool that shows why fictional cases move in or out of a research cohort when the criteria change |
+| **Cohort Control Tower** | A research engineer connects two releases of a dataset. The tool spots sample swaps, duplicate patients and missing measurements, then reruns only the analyses those changes affect. | CPTAC proteomics and clinical data |
+| **Cohort Studio** | A researcher describes a cohort in plain English or on a visual canvas. The tool turns it into editable filters and joins, shows how many records survive each step, and exports a rerunnable workflow. | CPTAC RNA, protein and sample metadata |
+| **Model Crash Lab** | A computer vision team plugs in a tissue classifier. The lab runs it on original and altered images, finds its worst failure mode, and recommends images for manual review. | Public colorectal tissue patches (PathMNIST / NCT-CRC-HE) |
+| **Benchmark Builder** | A team builds an evaluation service for cell-line predictions that catches overlapping cell lines, creates a documented split and compares against a simple baseline. | Broad DepMap |
+| **Amendment Replay Engine** | A trial research team compares two versions of eligibility rules. AI proposes structured rules, a person corrects them, and the engine reruns a fictional cohort to show who moved in, out, or needs review. | ClinicalTrials.gov record history with fictional cases |
 
-## The same two tracks
-| Track | What every project must prove | Example products |
+### Evidence Navigator
+| Product | User and workflow | Planned data |
 |---|---|---|
-| **Cohort Firewall** | Which samples can answer a question, and how a change in the data affects the result | A cohort builder that checks patient-to-sample joins; a monitor that catches a new release dropping a cancer subtype; a model tester that shows what happens when protein data is missing |
-| **Evidence Navigator** | That a reviewer can trace a claim to the data, reproduce it, and see where it stops being supported | A protein evidence explorer; a pathology viewer linked to the sample behind a claim; a trial-criteria assistant that highlights what changed |
+| **Evidence Copilot** | A scientist asks a question. The assistant runs a bounded analysis and returns a chart with its source release, filters, sample count and calculation attached, and says what it couldn't establish. | CPTAC proteomics |
+| **Pathology Search and Review** | A reviewer starts from a tissue patch, finds similar examples, and sends uncertain results to a review queue, keeping the original prediction alongside the correction. | Tissue patches, precomputed image embeddings and model predictions |
+| **Multimodal Case Room** | A research team opens one case and sees its slide or scan, sample metadata and molecular evidence together, with an AI brief linked to each source. It refuses to attach an image it can't verify. | CPTAC lung adenocarcinoma slides and CT (NCI Imaging Data Commons) with molecular data |
+| **Research Claim Auditor** | A reviewer uploads a report. The agent extracts claims and sorts them into supported, contradicted, or insufficient evidence, each with its calculation. | CPTAC data and an organizer-written research brief |
+| **Repair Review Desk** | A reviewer receives a proposed cohort or data repair from a Firewall tool, sees which findings move, and approves, rejects or asks for more evidence, keeping the original analysis. | Output from any Firewall product |
 
-## A finale we're designing: "The Result Changed"
-Judges hand each team a new data release: same number of samples, but some have changed and one cancer type has lost its protein data. The team reruns its tool and shows which conclusions still hold. Then a reviewer opens that result in a different team's Navigator, using the shared [findings format](examples/findings.schema.json).
+## The finale: tools that work together
+- **Cohort Control Tower → Repair Review Desk.** One team catches a silent change in a research cohort. A second team, using its own product, receives the finding, sees which conclusions moved, and records a review decision.
+- **Model Crash Lab → Pathology Search and Review.** One team finds where a model fails. Another team's reviewer investigates those failures and corrects them.
 
-**Want to get ready?** Build your tool this weekend so it reads the shared findings format and reruns cleanly when the data changes. That's the skill the Cancer Data Lab rewards.
+**Want to get ready?** Build this weekend's tool so it reads and writes the shared [findings format](examples/findings.schema.json) and reruns cleanly when the data changes.
+
+*Classifiers in the Cancer Data Lab are research tools on public patches and cell lines, judged on robustness and honesty. No diagnosis, treatment recommendations or clinical claims.*
