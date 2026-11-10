@@ -36,6 +36,6 @@ jupyter notebook starter/starter.ipynb
 ## Source and citation
 Collected by Dr. William H. Wolberg, University of Wisconsin Hospitals, Madison, 1989–1991; donated to UCI on 15 July 1992.
 Cite: Wolberg, W. (1990). *Breast Cancer Wisconsin (Original)* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5HP4Z
-License: [confirm on the UCI page before publishing].
+Dataset license: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/), as listed on the [UCI dataset page](https://archive.ics.uci.edu/dataset/15). This license statement applies to the UCI dataset. The starter notebook derives collection groups from UCI’s documented row boundaries; those labels are not fields in the source data.
 
 The data is de-identified but patient-derived. Don't attempt to re-identify anyone or link it to other sources.
