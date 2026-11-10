@@ -6,7 +6,7 @@
 
 ## What you get
 - Release A: `python data/tcga-brca/fetch.py`
-- Practice release B: `python data/tcga-brca/make_release.py`. Same sample count as A, but some samples changed. Check your build: from `data/tcga-brca/releases/practice-B`, run `sha256sum -c ../../practice-B.sha256`.
+- Practice release B: `python data/tcga-brca/make_release.py`. Same sample count as A, but some samples changed. Check your build with `python data/tcga-brca/make_release.py --verify`.
 - Two analyses to protect: `data/tcga-brca/reference_analyses.py`
   - **A1:** ER-alpha protein by clinical ER status (uses clinical + protein)
   - **A2:** RNA subtype mix of primary tumors (uses clinical only)

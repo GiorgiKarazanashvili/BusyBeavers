@@ -2,13 +2,17 @@
 
 Usage (from the repo root, after fetch.py):
   python data/tcga-brca/make_release.py                      # builds the public practice release B
+  python data/tcga-brca/make_release.py --verify             # checks your practice-B against the published content hashes
   python data/tcga-brca/make_release.py --config my.json     # organizers: a private release from a config file
+
+Values are copied as their original text, so a release is the same on any machine. Hashes cover each file's
+decompressed content (see practice-B.content.sha256), because gzip bytes can differ between systems.
 
 Output: data/tcga-brca/releases/<name>/ with the same file names as raw/, plus CHANGES.json listing exactly
 what was altered. CHANGES.json is the answer key for practice: don't read it until your tool has run.
 Releases are generated locally and never committed.
 """
-import json, pathlib, random, shutil, sys
+import gzip, hashlib, json, pathlib, random, shutil, sys
 import pandas as pd
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -19,9 +23,21 @@ PRACTICE = {"name": "practice-B", "seed": 2026,
                         {"type": "replace_with_duplicates", "file": "protein_rppa.tsv.gz", "count": 5, "subtype": "Her2"}]}
 
 def read(name):
+    # dtype=str + keep_default_na=False: every cell keeps its exact original text
     if name == "clinical.tsv":
-        return pd.read_csv(RAW / name, sep="\t", low_memory=False, dtype=str)
-    return pd.read_csv(RAW / name, sep="\t", index_col=0)
+        return pd.read_csv(RAW / name, sep="\t", dtype=str, keep_default_na=False)
+    return pd.read_csv(RAW / name, sep="\t", index_col=0, dtype=str, keep_default_na=False)
+
+def content_hash(path):
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+def verify(name="practice-B"):
+    expected = dict(line.split()[::-1] for line in open(HERE / f"{name}.content.sha256") if line.strip())
+    bad = [f for f, h in expected.items() if content_hash(OUT / name / f) != h]
+    print("practice-B matches the published release" if not bad else f"MISMATCH in {bad}: rebuild from a fresh fetch")
+    sys.exit(1 if bad else 0)
 
 def write(df, dest, name):
     if name == "clinical.tsv":
@@ -30,6 +46,8 @@ def write(df, dest, name):
         df.to_csv(dest / name, sep="\t", compression={"method": "gzip", "mtime": 0} if name.endswith(".gz") else None)
 
 def main():
+    if "--verify" in sys.argv:
+        verify()
     cfg = PRACTICE
     if "--config" in sys.argv:
         cfg = json.load(open(sys.argv[sys.argv.index("--config") + 1]))
@@ -68,7 +86,7 @@ def main():
                         "note": f"{ch['subtype']} loses {ch['count']} protein samples; total sample count unchanged"})
         elif ch["type"] == "relabel_clinical":                # a clinical field changes for some samples
             col = clinical[ch["column"]]
-            eligible = clinical[(clinical.sampleID.str[13:15] == "01") & col.notna() & (col != ch["new_value"])]
+            eligible = clinical[(clinical.sampleID.str[13:15] == "01") & (col != "") & (col != ch["new_value"])]
             pick = rng.sample(sorted(eligible.sampleID), ch["count"])
             before = {s: clinical.loc[clinical.sampleID == s, ch["column"]].item() for s in pick}
             clinical.loc[clinical.sampleID.isin(pick), ch["column"]] = ch["new_value"]

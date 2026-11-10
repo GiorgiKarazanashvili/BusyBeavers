@@ -26,11 +26,13 @@
         "files": [
           {
             "file": "clinical.tsv",
-            "sha256": "39eb3be0fb86e6a577bd2cc01502a7fa5a271e1e1cba294e9dc644ad99580d7f"
+            "sha256": "39eb3be0fb86e6a577bd2cc01502a7fa5a271e1e1cba294e9dc644ad99580d7f",
+            "hash_of": "content"
           },
           {
             "file": "protein_rppa.tsv.gz",
-            "sha256": "8f4fae81c6bb6339e2e22451b26f3cb53642e46fe0f491c35c4c76ac69d353c2"
+            "sha256": "e5ee5f77c9a5dfb3c6ea90d84a47db2866543d3dcaebc5093efb691b8847da5f",
+            "hash_of": "content"
           }
         ]
       }
