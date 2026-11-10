@@ -2,6 +2,10 @@
 
 Submit through the judging form by the **code freeze: Saturday, November 14, 2:15 PM ET**.
 
+## Before Saturday
+- [ ] **Checkpoint 1 (Thursday):** posted one working result in Discord.
+- [ ] **Checkpoint 2 (Friday):** your paired team cloned your repo fresh and ran it from the README; you fixed what broke. You did the same for them.
+
 ## Everyone
 - [ ] **Repository** is accessible to the judges, and the submitted commit is the one you'll demo.
 - [ ] **README** names your product, track, **user** and the **one workflow** they finish, plus team members and exact setup and run steps.
