@@ -7,3 +7,4 @@ numpy
 pillow
 scikit-learn
 idc-index  # slides, CT and annotations from NCI Imaging Data Commons
+cryptography>=41  # opens the sealed envelopes on Saturday (envelopes/unseal.py)

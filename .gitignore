@@ -12,3 +12,5 @@ data/lidc-idri/raw/
 data/depmap/raw/
 data/cptac/raw/
 data/clinical-trials/raw/
+# Opened envelopes are local only
+envelopes/opened/

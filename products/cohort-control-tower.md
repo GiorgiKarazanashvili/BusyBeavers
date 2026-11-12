@@ -25,6 +25,6 @@
 Drop in release B. Your tool catches that membership changed even though the count didn't, identifies A1 as affected, and leaves A2 alone.
 
 ## What judges will test
-A different release you haven't seen, with different changes. Your tool must find them without being told what to look for. Run it live and produce `findings.json`; the organizers' checker compares your findings with the answer key, and judges see that comparison while they score.
+A different release you haven't seen, with different changes. It arrives in your [sealed envelope](../envelopes/README.md): the same five file names and format as release A, without RNA. Your tool must find the changes without being told what to look for. Run it live and produce `findings.json`; the organizers' checker compares your findings with the answer key, and judges see that comparison while they score.
 
 **Suggested stack:** pandas or DuckDB, Streamlit, any LLM for the summary (no keys in the repo).
