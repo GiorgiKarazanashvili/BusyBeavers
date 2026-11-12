@@ -25,8 +25,8 @@ Unsealing takes about 10 to 20 seconds, mostly checking fingerprints and rebuild
 |---|---|---|
 | `release/` | Cohort Control Tower | A **new TCGA-BRCA release**: the same 5 file names and format as release A (`clinical.tsv`, `survival.tsv`, `mutation_gene_level.tsv.gz`, `copy_number_gistic.tsv.gz`, `protein_rppa.tsv.gz`). **No RNA file**, and no `CHANGES.json`: finding the changes is your tool's job. |
 | `repair_desk_input.json` | Repair Review Desk | Findings to review, in the shared format |
-| `claim_auditor_brief.md` | Research Claim Auditor | A short research brief to check |
-| `cohort_studio_request.txt` | Cohort Studio | The cohort to build |
+| `claim_auditor_report.md` | Research Claim Auditor | A short report whose claims you check |
+| `cohort_studio_request.md` | Cohort Studio | The cohort to build |
 | `evidence_copilot_questions.md` | Evidence Copilot | The questions to answer |
 | `case_room_case.txt` | Multimodal Case Room | The case to open |
 
