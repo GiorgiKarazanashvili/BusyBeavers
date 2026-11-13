@@ -14,6 +14,7 @@ from .load import load_release
 
 INPUT_STEMS = {"clinical", "protein_rppa"}                     # files the analyses read
 ANALYSIS_INPUTS = {"A1": {"clinical", "protein_rppa"}, "A2": {"clinical"}}
+OPTIONAL_STEMS = {"rna_hiseq"} 
 
 
 @lru_cache(maxsize=None)
@@ -34,7 +35,8 @@ def changed_stems(dir_a, dir_b):
     out = set()
     for s in set(fa) | set(fb):
         if s not in fa or s not in fb:
-            out.add(s)
+            if s not in OPTIONAL_STEMS:
+                out.add(s)
             continue
         sa, sb = fa[s].stat(), fb[s].stat()
         if _sha(str(fa[s]), sa.st_size, sa.st_mtime_ns) != _sha(str(fb[s]), sb.st_size, sb.st_mtime_ns):
