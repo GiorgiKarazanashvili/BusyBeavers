@@ -83,20 +83,23 @@ def _display_path(p: Path) -> str:
 def _inventory(path: Path) -> dict[str, bool]:
     return {f: (path / f).is_file() for f in config.KNOWN_FILES}
 
+def _natural_key(path):
+    """t2 before t10: split the name into text and number chunks."""
+    return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", path.name)]
 
 def _candidate_dirs() -> Iterable[tuple[str, Path, str]]:
     yield "baseline", config.BASELINE_DIR, "baseline"
     if config.GENERATED_RELEASES_DIR.is_dir():
-        for d in sorted(config.GENERATED_RELEASES_DIR.iterdir()):
+        for d in sorted(config.GENERATED_RELEASES_DIR.iterdir(), key=_natural_key):
             if d.is_dir() and NAME_RE.match(d.name):
                 yield d.name, d, "generated"
     if config.ENVELOPES_OPENED_DIR.is_dir():
-        for d in sorted(config.ENVELOPES_OPENED_DIR.iterdir()):
+        for d in sorted(config.ENVELOPES_OPENED_DIR.iterdir(), key=_natural_key):
             rel = d / "release"
             if rel.is_dir() and NAME_RE.match(d.name):
                 yield f"envelope-{d.name}", rel, "envelope"
     if config.UPLOADS_DIR.is_dir():
-        for d in sorted(config.UPLOADS_DIR.iterdir()):
+        for d in sorted(config.UPLOADS_DIR.iterdir(), key=_natural_key):
             if d.is_dir() and NAME_RE.match(d.name):
                 yield f"upload-{d.name}", d, "upload"
 

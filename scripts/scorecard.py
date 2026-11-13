@@ -5,6 +5,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # must come bef
 from cfw.load import load_release
 from cfw.diff import diff_releases
 from cfw.impact import impact
+from cfw.compare import compare
 
 
 BC = re.compile(r"TCGA-\w\w-\w{4}-\d\d")
@@ -18,12 +19,16 @@ def ref_results(d):
     for o in out.values(): o.pop("sample_ids", None)
     return out
 
-A, refA = load_release(RAW), ref_results(RAW)
+refA = ref_results(RAW)
 print(f"{'test':28}{'found':>8}{'false':>7}{'A1':>5}{'A2':>5}{'safe':>7}{'secs':>6}")
-for d in sorted(ROOT.joinpath("releases").glob("t*")):
+
+def test_num(p):
+    m = re.match(r"t(\d+)", p.name)
+    return int(m.group(1)) if m else 10**9      # anything that isn't tN goes last
+
+for d in sorted(ROOT.joinpath("releases").glob("t*"), key=test_num):
     t0 = time.time()
-    B = load_release(d)
-    findings, imp = diff_releases(A, B), impact(A, B)
+    _, _, findings, imp = compare(RAW, d)
     mine = {i for f in findings for i in f["sample_ids"]}
     truth = set(BC.findall((d / "CHANGES.json").read_text()))
     refB = ref_results(d)
