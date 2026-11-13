@@ -159,6 +159,13 @@ def build_summary(doc: dict, rel_a: Release, rel_b: Release, notes: list[str]) -
                     for e in f.get("evidence", []) if e.get("kind") == "sample"})
 
     review = [f["id"] for f in findings if f.get("needs_human_review")]
+    # ids whose membership differs in at least one file present in both releases (the release-wide
+    # added/removed counts miss a sample dropped from one file but still listed in another)
+    per_file_changed: set[str] = set()
+    for f in set(inv_a["per_file"]) & set(inv_b["per_file"]):
+        a, b = inv_a["per_file"][f], inv_b["per_file"][f]
+        if "error" not in a and "error" not in b:
+            per_file_changed |= a["ids"] ^ b["ids"]
     return {
         "release_a": {"name": rel_a.name, "samples": len(inv_a["ids"]), "patients": inv_a["patients"],
                       "files_present": [f for f, v in rel_a.files.items() if v], "missing_required": rel_a.missing_required},
@@ -166,6 +173,7 @@ def build_summary(doc: dict, rel_a: Release, rel_b: Release, notes: list[str]) -
                       "files_present": [f for f, v in rel_b.files.items() if v], "missing_required": rel_b.missing_required},
         "samples_added": len(inv_b["ids"] - inv_a["ids"]),
         "samples_removed": len(inv_a["ids"] - inv_b["ids"]),
+        "samples_changed_in_any_file": len(per_file_changed),
         "files": inventory.membership_table(inv_a, inv_b),
         "metrics": {
             "total_findings": len(findings),
