@@ -14,5 +14,14 @@ data/cptac/raw/
 data/clinical-trials/raw/
 # Opened envelopes are local only
 envelopes/opened/
-
+# Cohort Control Tower app: generated runs and uploaded releases
+outputs/runs/
+outputs/uploads/
+.pytest_cache/
 .venv/
+__pycache__/
+scratch/
+run.json
+findings*.json
+
+CLAUDE.md

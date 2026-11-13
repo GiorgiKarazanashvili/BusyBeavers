@@ -16,6 +16,9 @@ You don’t need a GitHub account to open the starter. You’ll need to sign in 
 - **Pick a mission:** six featured products and optional custom builds, across two tracks.
 - **Run the starter:** in 15 minutes, download real tumor data, see how each join shrinks the cohort, and open a slide in your browser.
 
+## Our build: Cohort Control Tower
+Track 1 infrastructure: FastAPI backend, Streamlit dashboard, detector adapter and validated `findings.json` export. The detection engine is a separate component plugged in through the adapter. Setup, run and test commands, API reference and the engine contract: **[CONTROL_TOWER_README.md](CONTROL_TOWER_README.md)**.
+
 ## Pick a user, build one workflow
 | Track | What it does | Featured products |
 |---|---|---|
