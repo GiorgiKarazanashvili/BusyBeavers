@@ -13,8 +13,8 @@ from .impact import ANALYSES, impact
 from .load import load_release
 
 INPUT_STEMS = {"clinical", "protein_rppa"}                     # files the analyses read
+OPTIONAL_STEMS = {"rna_hiseq"}                                  # envelopes ship without RNA: absence is expected
 ANALYSIS_INPUTS = {"A1": {"clinical", "protein_rppa"}, "A2": {"clinical"}}
-OPTIONAL_STEMS = {"rna_hiseq"} 
 
 
 @lru_cache(maxsize=None)

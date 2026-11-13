@@ -1,11 +1,12 @@
 import pandas as pd
-from .fingerprint import profile_hashes
+from .fingerprint import profile_hashes, rows_close
 
 def _dup_groups(h):
     d = h[h.duplicated(keep=False)]
     return {frozenset(g.index) for _, g in d.groupby(d)}
 
 def diff_file(name, a_df, b_df):
+    a_df, b_df = a_df[~a_df.index.duplicated()], b_df[~b_df.index.duplicated()]
     a, b = profile_hashes(a_df), profile_hashes(b_df)
     groups_a, groups_b = _dup_groups(a), _dup_groups(b)
     out = []
@@ -16,7 +17,7 @@ def diff_file(name, a_df, b_df):
         out.append(dict(type="duplicate_id", file=name, sample_ids=sorted(set(b.index[b.index.duplicated()]))))
     a, b = a[~a.index.duplicated()], b[~b.index.duplicated()]
     common = a.index.intersection(b.index)
-    changed = [i for i in common if a[i] != b[i]]
+    changed = [i for i in common if a[i] != b[i] and not rows_close(a_df.loc[i], b_df.loc[i])]
     a_by_hash = a.groupby(a).groups
     seen = set()
     for i in changed:
