@@ -1,0 +1,16 @@
+# Streamlit base theme for the Cohort Control Tower dashboard (dark, warm brown palette).
+# The dashboard's own Dark/Light switch (top bar) restyles the page on top of this.
+[theme]
+base = "dark"
+primaryColor = "#c9823b"
+backgroundColor = "#171311"
+secondaryBackgroundColor = "#26201c"
+textColor = "#efe6dc"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = false
+
+[browser]
+gatherUsageStats = false
