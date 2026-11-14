@@ -117,9 +117,9 @@ def read_raw(name):
 
 def write(df, dest, name):
     if name == "clinical.tsv":
-        df.to_csv(dest / name, sep="\t", index=False)
+        df.to_csv(dest / name, sep="\t", index=False, lineterminator="\n")
     else:
-        df.to_csv(dest / name, sep="\t", compression={"method": "gzip", "mtime": 0} if name.endswith(".gz") else None)
+        df.to_csv(dest / name, sep="\t", lineterminator="\n", compression={"method": "gzip", "mtime": 0} if name.endswith(".gz") else None)
 
 
 def rebuild(payload, dest):
@@ -147,7 +147,18 @@ def rebuild(payload, dest):
     say("✓", f"All {len(RELEASE_FILES)} release files match their fingerprints")
 
 
+def safe_output():
+    # Windows consoles and captured output often use cp1252, which can't print ✓ or ✗.
+    # Replace what can't be encoded instead of crashing.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main():
+    safe_output()
     if len(sys.argv) < 3:
         print(__doc__)
         sys.exit(1)
