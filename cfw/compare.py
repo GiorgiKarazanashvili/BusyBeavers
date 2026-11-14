@@ -8,6 +8,7 @@ import hashlib
 from functools import lru_cache
 from pathlib import Path
 
+from .coverage import coverage_loss
 from .diff import diff_releases
 from .impact import ANALYSES, impact
 from .load import load_release
@@ -50,8 +51,10 @@ def compare(dir_a, dir_b):
     need = set(changed)
     if changed & INPUT_STEMS:
         need |= INPUT_STEMS                                    # slices need both inputs
+    if changed:
+        need.add("clinical")                                   # subgroup labels for coverage
     A, B = load_release(dir_a, only=need), load_release(dir_b, only=need)
-    raw = diff_releases(A, B)
+    raw = diff_releases(A, B) + coverage_loss(A, B)
     if changed & INPUT_STEMS:
         imp = impact(A, B)
     else:

@@ -67,6 +67,9 @@ def test_adapter_resolution_order(env, set_detector, monkeypatch):
     with pytest.raises(da.DetectorNotConfigured):
         da.resolve()
     # auto-discovery: a detection/engine.py in a temp package on sys.path
+    import sys
+    for m in ("detection", "detection.engine"):
+        monkeypatch.delitem(sys.modules, m, raising=False)       # undo the autouse hiding of the real engine
     pkg = env / "detection"
     pkg.mkdir()
     (pkg / "__init__.py").write_text("")

@@ -159,6 +159,23 @@ def _events(raw, fn_a, fn_b, name_a, name_b):
                 repair=dict(action="flag_for_review", ids=ids, file=file_b,
                             why="Check whether the missing values were withdrawn on purpose; consider restoring them from release A.")))
 
+        elif typ == "coverage_loss":
+            parts = []
+            for it in items:
+                pct = 100.0 * (it["before"] - it["after"]) / max(it["before"], 1)
+                parts.append(f"{it['subgroup']} {it['before']} -> {it['after']} (-{pct:.1f}%)")
+            tb, ta = items[0]["total_before"], items[0]["total_after"]
+            same = " The file's total primary-tumor count is unchanged." if tb == ta else f" Total primary tumors: {tb} -> {ta}."
+            ev = [_ptr(i, name_a, file_a, f"{file_a}: primary tumor in subgroup {it['subgroup']} present in release A, absent from release B")
+                  for it in items for i in it["sample_ids"]]
+            events.append(dict(
+                kind="missing_data", file=stem, ids=ids, severity_hi="high", severity_lo="medium", confidence="high",
+                summary=f"{file_b}: primary-tumor coverage by subgroup fell: {'; '.join(parts[:4])}{' ...' if len(parts) > 4 else ''}.{same}",
+                evidence=ev,
+                limitation="Subgroup labels come from release A's clinical file; coverage counts samples present, not measurement quality.",
+                repair=dict(action="restore_from_previous_release", ids=ids, file=file_a,
+                            why=f"Restore the lost samples from release A, or rerun subgroup comparisons on {file_a} with the smaller subgroup flagged.")))
+
         elif typ == "duplicate_id":
             events.append(dict(
                 kind="duplicate", file=stem, ids=ids, severity_hi="high", severity_lo="medium", confidence="high",

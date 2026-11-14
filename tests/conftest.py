@@ -79,3 +79,12 @@ def set_detector(monkeypatch):
         from backend import config
         monkeypatch.setattr(config, "DETECTOR_SPEC", spec)
     return _set
+
+
+@pytest.fixture(autouse=True)
+def _hide_real_engine(monkeypatch):
+    """The repo now ships a real detection/engine.py. Tests that simulate "no engine installed"
+    must not auto-discover it, so make `import detection` fail unless a test puts its own on sys.path."""
+    import sys
+    monkeypatch.setitem(sys.modules, "detection", None)
+    monkeypatch.setitem(sys.modules, "detection.engine", None)
