@@ -2,6 +2,9 @@
 
 Run (from the repository root, with the API already running):
     streamlit run frontend/app.py
+Single-command hosts (Streamlit Community Cloud): run the same command without the API; the dashboard starts
+`uvicorn backend.main:app` itself as a sidecar process (frontend/local_backend.py) and fetches the official
+data on first start. See frontend/README.md, "Deploy as a website".
 
 Layout: full-width page. A top bar (project name, Home | Runs | Engine | Mission, Dark/Light switch,
 API/engine status). On Home, the work panel (Select release | Results | Next steps | Detailed info) sits
@@ -25,6 +28,7 @@ import streamlit as st
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from api_client import DEFAULT_URL, ApiClient, ApiError  # noqa: E402
+import local_backend  # noqa: E402
 
 st.set_page_config(page_title="Cohort Control Tower", page_icon="🛰️", layout="wide",
                    initial_sidebar_state="collapsed")
@@ -287,6 +291,38 @@ def fetch_health(url: str) -> dict:
     return ApiClient(url).health()
 
 
+def resolve_backend() -> tuple[dict | None, str | None]:
+    """Find the API. Two-process mode: it is already running at CCT_API_URL. Single-command hosts (Streamlit
+    Community Cloud): start the repository's own backend as a sidecar process and talk to it over HTTP.
+
+    CCT_MODE=http     only connect to CCT_API_URL
+    CCT_MODE=sidecar  always run `uvicorn backend.main:app` next to the dashboard
+    CCT_MODE=auto     connect if reachable, otherwise start the sidecar (default)
+    Returns (health, error)."""
+    url = st.session_state["api_url"]
+    want = local_backend.mode()
+    try:
+        if want == "http" or (want == "auto" and local_backend.api_alive(url)):
+            h = fetch_health(url)
+            st.session_state["backend_mode"] = "sidecar" if local_backend.sidecar_pid() else "http"
+            return h, None
+    except Exception as e:  # noqa: BLE001
+        return None, api_error_text(e)
+    try:
+        if not (local_backend.baseline_ready() and local_backend.practice_ready()):
+            with st.status("First start: preparing the official data", expanded=True) as box:
+                local_backend.ensure_data(lambda m: box.write(m))
+                box.update(label="Data ready", state="complete", expanded=False)
+        with st.spinner("Starting the Cohort Control Tower API (uvicorn backend.main:app)"):
+            local_backend.ensure_api(url)
+        fetch_health.clear()
+        h = fetch_health(url)
+        st.session_state["backend_mode"] = "sidecar"
+        return h, None
+    except Exception as e:  # noqa: BLE001
+        return None, f"Could not start the backend next to the dashboard: {api_error_text(e)}"
+
+
 # ----------------------------------------------------------------------------- state & theme
 st.session_state.setdefault("api_url", os.environ.get("CCT_API_URL", DEFAULT_URL))
 st.session_state.setdefault("page", "Home")
@@ -301,11 +337,7 @@ if "theme" not in st.session_state:
 T = THEMES[st.session_state["theme"]]
 st.html(CSS.format(vars=" ".join(f"--{k.replace('_', '-')}: {v};" for k, v in T.items())))
 
-health, health_err = None, None
-try:
-    health = fetch_health(st.session_state["api_url"])
-except Exception as e:  # noqa: BLE001
-    health_err = api_error_text(e)
+health, health_err = resolve_backend()
 det = (health or {}).get("detector", {}) or {}
 det_status = det.get("status")
 engine_ready = det_status in ("configured", "auto", "mock")
@@ -327,17 +359,24 @@ with st.container(key="topbar"):
     else:
         status_txt = {"mock": "engine: MOCK", "not_configured": "engine: not configured", "error": "engine: load error",
                       "auto": "engine: auto-discovered", "configured": "engine: connected"}.get(det_status, "engine: ?")
-        status_txt = f"API v{health.get('version', '')} · {status_txt}"
+        where = "API (sidecar)" if st.session_state.get("backend_mode") == "sidecar" else "API"
+        status_txt = f"{where} v{health.get('version', '')} · {status_txt}"
     cols[6].html(f'<div class="cct-status">{esc(status_txt)}</div>')
 
 page = st.session_state["page"]
 
 if health_err:
     with st.container(key="panel1"):
-        heading("API not reachable")
+        heading("Backend not available")
         note("bad", health_err)
+        kv("Two-process mode: start the API and reload. Single-command hosts (Streamlit Community Cloud): leave CCT_MODE on "
+           "auto (or set it to sidecar); the dashboard then runs `uvicorn backend.main:app` itself, so fastapi, uvicorn and "
+           "the backend/ package must be installed next to this app.")
         st.code("uvicorn backend.main:app --port 8000", language="bash")
         st.text_input("API URL", key="api_url")
+        if local_backend.bootstrap_log():
+            with st.expander("Startup log"):
+                st.code("\n".join(local_backend.bootstrap_log()))
     st.stop()
 
 
@@ -384,7 +423,8 @@ def page_engine() -> None:
                         "`analyses`, `repairs`, `verdict` out. Skeleton: `contrib/engine_template.py`.")
         with right:
             heading("Server checks")
-            table([{"item": "baseline release (data/tcga-brca/raw)", "value": health.get("baseline_present")},
+            table([{"item": "backend", "value": f"{st.session_state['api_url']}" + (f" (uvicorn sidecar started by the dashboard, pid {local_backend.sidecar_pid()})" if st.session_state.get("backend_mode") == "sidecar" else " (separate process)")},
+                   {"item": "baseline release (data/tcga-brca/raw)", "value": health.get("baseline_present")},
                    {"item": "releases discovered", "value": health.get("releases_found")},
                    {"item": "format/findings.schema.json", "value": health.get("schema_present")},
                    {"item": "format/validate.py", "value": health.get("validator_present")},

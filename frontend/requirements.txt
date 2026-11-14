@@ -1,0 +1,12 @@
+# Installed by Streamlit Community Cloud when frontend/app.py is the entrypoint (the root requirements.txt stays
+# the full development set). Everything the dashboard, the FastAPI backend it starts as a sidecar, the organizers'
+# validator and data scripts, and detection/engine.py need.
+pandas>=2.0
+numpy
+jsonschema>=4.0
+fastapi>=0.110
+uvicorn>=0.29
+python-multipart>=0.0.9
+pydantic>=2.0
+streamlit>=1.45
+requests>=2.31
