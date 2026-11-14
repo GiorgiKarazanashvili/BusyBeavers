@@ -125,3 +125,27 @@ def run_findings(run_id: str, download: bool = False):
         raise HTTPException(status_code=409, detail=f"Run '{run_id}' has no valid findings.json: {rec.get('error') or 'unknown error'}")
     headers = {"Content-Disposition": f'attachment; filename="findings-{run_id}.json"'} if download else None
     return FileResponse(path, media_type="application/json", headers=headers)
+
+# --- Q&A over a finished run (logic lives in detection/qa.py; nothing here reads data) ---
+from pydantic import BaseModel
+ 
+ 
+class AskRequest(BaseModel):
+    question: str = ""
+    chip: str | None = None
+ 
+ 
+@app.get("/api/qa/chips")
+def qa_chips():
+    from detection import qa
+    return {"chips": [{"id": k, "label": v} for k, v in qa.CHIPS.items()], "free_text_available": qa.has_key()}
+ 
+ 
+@app.post("/api/runs/{run_id}/ask")
+def qa_ask(run_id: str, body: AskRequest):
+    import json
+    from detection import qa
+    path = comparison.run_dir(run_id) / "findings.json"
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="No findings.json for this run (the run failed or does not exist).")
+    return qa.ask(json.loads(path.read_text()), question=body.question, chip=body.chip)
