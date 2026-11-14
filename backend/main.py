@@ -12,13 +12,14 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 
 from backend import config
-from backend.models import CompareRequest, HealthResponse, ReleaseInfo, RunList, RunRecord
-from backend.services import comparison, detector_adapter, releases
+from backend.models import CompareRequest, FixRequest, HealthResponse, ReleaseInfo, RunList, RunRecord
+from backend.services import comparison, detector_adapter, fixes, releases
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
+FEATURES = {"fixes": True, "fixed_dataset": True}
 
 
 @asynccontextmanager
@@ -41,6 +42,11 @@ async def release_error_handler(request: Request, exc: releases.ReleaseError):
 @app.exception_handler(detector_adapter.DetectorError)
 async def detector_error_handler(request: Request, exc: detector_adapter.DetectorError):
     return JSONResponse(status_code=503, content={"detail": f"Detection engine unavailable. {exc}"})
+
+
+@app.exception_handler(fixes.FixError)
+async def fix_error_handler(request: Request, exc: fixes.FixError):
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
 
 @app.exception_handler(RequestValidationError)
@@ -70,7 +76,7 @@ def health():
         problems.append("format/findings.schema.json or format/validate.py missing.")
     return {"status": "ok" if not problems else "degraded", "version": VERSION, "detector": det,
             "baseline_present": baseline, "releases_found": len(found), "schema_present": schema_ok,
-            "validator_present": validator_ok, "problems": problems}
+            "validator_present": validator_ok, "problems": problems, "features": FEATURES}
 
 
 @app.get("/api/releases", response_model=list[ReleaseInfo])
@@ -125,6 +131,33 @@ def run_findings(run_id: str, download: bool = False):
         raise HTTPException(status_code=409, detail=f"Run '{run_id}' has no valid findings.json: {rec.get('error') or 'unknown error'}")
     headers = {"Content-Disposition": 'attachment; filename="findings.json"'} if download else None
     return FileResponse(path, media_type="application/json", headers=headers)
+
+# --- Easy fixes (person-started, undoable; logic in services/fixes.py) ---------------------------------
+
+@app.get("/api/runs/{run_id}/fixes")
+def list_fixes(run_id: str, include_undone: bool = False):
+    """Active fixes for this run (`include_undone=true` adds the undone ones: the full audit log)."""
+    return {"run_id": run_id, "fixes": fixes.list_fixes(run_id, include_undone=include_undone)}
+
+
+@app.post("/api/runs/{run_id}/fixes", status_code=201)
+def apply_fix(run_id: str, body: FixRequest):
+    """Exclude a flagged record or relabel one field of it. 404 unknown run/finding, 409 duplicate, 422 bad input."""
+    return fixes.apply_fix(run_id, body.model_dump())
+
+
+@app.delete("/api/runs/{run_id}/fixes/{fix_id}")
+def undo_fix(run_id: str, fix_id: str):
+    """Undo a fix. The entry stays in fixes.json with status 'undone'."""
+    return fixes.undo_fix(run_id, fix_id)
+
+
+@app.get("/api/runs/{run_id}/fixes/dataset")
+def fixed_dataset(run_id: str, mode: str = "user"):
+    """Zip of release B with the applied fixes. mode=easy: removals only; mode=user: removals + typed labels."""
+    data, name = fixes.build_dataset(run_id, mode)
+    return Response(data, media_type="application/zip", headers={"Content-Disposition": f'attachment; filename="{name}"'})
+
 
 # --- Q&A over a finished run (logic lives in detection/qa.py; nothing here reads data) ---
 from pydantic import BaseModel

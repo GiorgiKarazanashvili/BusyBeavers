@@ -39,6 +39,7 @@ class HealthResponse(BaseModel):
     schema_present: bool
     validator_present: bool
     problems: list[str]
+    features: dict[str, bool] = {}
 
 
 class Validation(BaseModel):
@@ -66,3 +67,15 @@ class RunRecord(BaseModel):
 
 class RunList(BaseModel):
     runs: list[RunRecord]
+
+
+class FixRequest(BaseModel):
+    """One easy fix, as posted by the dashboard (frontend/app.py: relabel_row / exclude_row)."""
+    finding_id: str = Field(..., max_length=40)
+    repair_id: Optional[str] = Field(None, max_length=40)
+    action: Literal["exclude", "relabel"]
+    record_id: str = Field(..., min_length=1, max_length=80)
+    file: Optional[str] = Field(None, max_length=300)
+    field: Optional[str] = Field(None, max_length=200)
+    new_value: Optional[str] = Field(None, max_length=200)
+    actor: Optional[str] = Field(None, max_length=80, description="Who applied it (role or name); defaults to 'dashboard user'")

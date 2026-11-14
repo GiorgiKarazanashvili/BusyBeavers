@@ -900,10 +900,7 @@ def tab_next(c: dict) -> None:
                          chip("ok" if x.get("status") == "applied" else "warn", x.get("status", "staged"))))
         st.html(rows_html(rows, scroll=True))
 
-    section("Export")
-    st.download_button("Download findings.json", data=c["raw"], file_name="findings.json", mime="application/json",
-                       type="primary", key="dl", on_click=lambda: ss["exported"].add(rid))
-    hint(f"The exact file the backend validated. Re-check with: python format/validate.py findings-{rid}.json")
+    hint("Downloads (findings.json and the fixed dataset) are in the side panel.")
 
 
 def relabel_row(rid: str, backend: bool, f: dict, r: dict, i: int, c: dict) -> None:
@@ -1095,6 +1092,49 @@ def tab_assistant(c: dict) -> None:
 
 
 # ----------------------------------------------------------------------------- side panel
+@st.cache_data(show_spinner="Building the fixed dataset…", max_entries=8)
+def fetch_dataset(url: str, run_id: str, mode: str, fix_ids: tuple) -> bytes:
+    """Rebuilt only when the mode or (in user mode) the applied fixes change."""
+    return ApiClient(url).fixed_dataset(run_id, mode)
+
+
+def downloads(c: dict) -> None:
+    rid = c["run_id"]
+    section("Downloads")
+    st.download_button("Download findings.json", data=c["raw"], file_name="findings.json", mime="application/json",
+                       type="primary", key="dl", width="stretch", on_click=lambda: ss["exported"].add(rid))
+    user = st.toggle("User fixed (my removals + labels)", key=f"mode-{rid}",
+                     help="Off = Easy fixed: every removal the engine suggested, applied automatically. "
+                          "On = User fixed: only the removals you clicked and the labels you typed.")
+    mode = "user" if user else "easy"
+    name = f"{c['rec']['release_b']}-{mode}-fixed.zip"
+    if user:
+        used = c["fixes"]
+        sig = tuple(x["fix_id"] for x in used)
+        empty_msg = "No fixes applied yet."
+        n_ex = sum(1 for x in used if x.get("action") == "exclude")
+        summary = f"User fixed · {n_ex} removal(s) · {len(used) - n_ex} label edit(s)"
+    else:
+        used = sorted({(t.get("id"), t.get("file")) for r in c["repairs"] if r.get("action") == "exclude"
+                       for t in r.get("targets", []) if t.get("kind") in RECORD_KINDS})
+        sig = ()
+        empty_msg = "The engine suggested no removals for this run."
+        summary = f"Easy fixed · {len(used)} suggested removal(s)"
+    if not c["backend_fixes"] or not used:
+        st.button("Download fixed dataset", key="dl-ds", disabled=True, width="stretch")
+        hint("Needs the fix API (backend) running." if not c["backend_fixes"] else empty_msg)
+        return
+    try:
+        data = fetch_dataset(ss["api_url"], rid, mode, sig)
+    except Exception as e:  # noqa: BLE001
+        st.button("Download fixed dataset", key="dl-ds", disabled=True, width="stretch")
+        hint(f"Could not build the dataset: {api_error_text(e)}")
+        return
+    st.download_button("Download fixed dataset", data=data, file_name=name, mime="application/zip",
+                       key="dl-ds", width="stretch")
+    hint(f"{summary} · release {c['rec']['release_b']} is not modified")
+
+
 def side_panel(c: dict, names: list[str]) -> None:
     rec, doc = c["rec"], c["doc"]
     if rec and rec["status"] in ("pending", "running"):
@@ -1122,6 +1162,7 @@ def side_panel(c: dict, names: list[str]) -> None:
                 + "</div>")
         if c["run_det"].get("mock"):
             notice("bad", "MOCK engine: placeholder output.")
+        downloads(c)
     elif rec:
         hint(f"{rec['release_a']} → {rec['release_b']} · {rec['status']}")
     else:

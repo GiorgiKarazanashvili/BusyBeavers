@@ -99,6 +99,11 @@ class ApiClient:
     def undo_fix(self, run_id: str, fix_id: str) -> dict:
         return self._call("delete", f"/api/runs/{run_id}/fixes/{fix_id}").json()
 
+    def fixed_dataset(self, run_id: str, mode: str = "user") -> bytes:
+        """Zip of release B with the applied fixes. mode "easy": removals only; "user": removals + typed labels."""
+        kw = {"timeout": max(self.timeout, 120)} if isinstance(self.s, requests.Session) else {}
+        return self._call("get", f"/api/runs/{run_id}/fixes/dataset", params={"mode": mode}, **kw).content
+
     def qa_chips(self) -> dict | None:
         """{"chips": [{"id", "label"}], "free_text_available": bool}, or None when the backend has no Q&A."""
         return self._optional("get", "/api/qa/chips")

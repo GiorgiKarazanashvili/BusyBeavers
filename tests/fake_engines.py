@@ -56,3 +56,26 @@ def not_a_dict_engine(release_a, release_b, output_path):
 
 def bad_verdict_engine(release_a, release_b, output_path):
     return {"findings": [], "verdict": "Looks fine"}
+
+
+def fixable_engine(release_a, release_b, output_path, *, release_names=None, progress=None):
+    """Findings the dashboard offers easy fixes for: a duplicate (exclude) and a clinical label conflict (relabel)."""
+    b = (release_names or ("a", "b"))[1]
+    dup = {"id": "F01", "kind": "duplicate", "summary": "identical protein profiles", "severity": "high",
+           "confidence": "high", "needs_human_review": True,
+           "evidence": [{"kind": "sample", "id": "TCGA-AA-0002-01", "release": b, "file": "protein_rppa.tsv.gz",
+                         "note": "protein_rppa.tsv.gz: new id in B; identical profile to TCGA-AA-0003-01"},
+                        {"kind": "sample", "id": "TCGA-AA-0003-01", "release": b, "file": "protein_rppa.tsv.gz"}]}
+    lab = {"id": "F02", "kind": "label_conflict", "summary": "ER status changed in place", "severity": "high",
+           "confidence": "high", "needs_human_review": True,
+           "evidence": [{"kind": "sample", "id": "TCGA-AA-0004-01", "release": b, "file": "clinical.tsv",
+                         "note": "clinical.tsv: values differ from release A in breast_carcinoma_estrogen_receptor_status"}]}
+    doc = {"findings": [dup, lab],
+           "repairs": [{"id": "R01", "action": "exclude", "targets": [dup["evidence"][0]], "justification": "dup",
+                        "addresses": ["F01"]},
+                       {"id": "R02", "action": "flag_for_review", "targets": lab["evidence"], "justification": "check",
+                        "addresses": ["F02"]}],
+           "verdict": "Conditional"}
+    with open(output_path, "w") as f:
+        json.dump(doc, f)
+    return doc
