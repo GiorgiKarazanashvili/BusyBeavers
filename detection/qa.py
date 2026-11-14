@@ -101,6 +101,16 @@ def build_context(doc, question=""):
 def _short(t, n=220):
     return t if len(t) <= n else t[:n - 1].rstrip() + "…"
 
+KIND_HEADLINE = {
+    "sample_swap": "Two samples' measurements were swapped",
+    "duplicate": "Samples now carry copies of other samples' data",
+    "membership_change": "Samples were lost or added; subgroup coverage changed",
+    "label_conflict": "Clinical values changed in place",
+    "missing_data": "Measurements went missing",
+}
+
+def _n_samples(f):
+    return len({e["id"] for e in f.get("evidence", []) if e.get("kind") == "sample"})
 
 def answer_chip(doc, chip):
     fs, an, rp = doc.get("findings", []), doc.get("analyses", []), doc.get("repairs", [])
@@ -109,8 +119,14 @@ def answer_chip(doc, chip):
         lines = [f"Verdict: {doc.get('verdict')}. {len(fs)} finding(s)."]
         for f in fs:
             aff = ", ".join(f.get("affects_analyses", [])) or "no protected analysis"
-            lines.append(f"{f['id']} ({f['kind']}, {f.get('severity')}, affects {aff}): {_short(f.get('summary', ''))}")
+            head = KIND_HEADLINE.get(f["kind"]) or _short(f.get("summary", ""), 80)
+            n = _n_samples(f)
+            lines.append(f"- {f['id']}: {head}" + (f" ({n} samples)" if n else "") + f". Affects {aff}.")
             cites.append(f["id"])
+        for a in an:
+            lines.append(f"- {a['id']}: " + ("rerun, results changed" if a.get("status") == "changed"
+                     else "rerun, unchanged" if a.get("status") == "unchanged" else "left alone, its inputs are untouched"))
+            cites.append(a["id"])
         text = "\n".join(lines) if fs else f"Verdict: {doc.get('verdict')}. No changes were found between the two releases."
     elif chip == "analyses":
         lines = []
