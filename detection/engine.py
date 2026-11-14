@@ -112,29 +112,44 @@ def _events(raw, fn_a, fn_b, name_a, name_b):
 
         elif typ in ("samples_added", "samples_removed"):
             dup_ids = {i for it in groups.get((stem, "duplicate_profile"), []) for i in it["sample_ids"]}
+            cov = groups.get((stem, "coverage_loss"), [])
             if typ == "samples_added":
-                other = {i for it in groups.get((stem, "samples_removed"), []) for i in it["sample_ids"]}
-                note = f"{file_b}: id absent from release A"
-                rel, fl = name_b, file_b
+                # new ids that are copies of other samples are reported inside the duplicate finding
+                ids = [i for i in ids if i not in dup_ids]
+                if not ids:
+                    continue
+                events.append(dict(
+                    kind="membership_change", file=stem, ids=ids, severity_hi="high", severity_lo="medium", confidence="high",
+                    summary=f"{file_b}: {len(ids)} sample id(s) added between releases.",
+                    evidence=[_ptr(i, name_b, file_b, f"{file_b}: id absent from release A") for i in ids],
+                    limitation="Direct id comparison; whether the change is deliberate (new samples, re-processing) is not visible in the files.",
+                    repair=dict(action="flag_for_review", ids=ids, file=file_b,
+                                why="Confirm that these new ids belong in the release and have genuine measurements.")))
             else:
-                other = {i for it in groups.get((stem, "samples_added"), []) for i in it["sample_ids"]}
-                note = f"{file_a}: id present in release A, absent from release B"
-                rel, fl = name_a, file_a
-            ev = []
-            for i in ids:
-                n = note + ("; its profile is identical to another sample's (see duplicate finding)" if i in dup_ids else "")
-                ev.append(_ptr(i, rel, fl, n))
-            word = "added" if typ == "samples_added" else "removed"
-            same = f" Counts can stay equal while membership changes ({len(other)} sample(s) went the other way)." if other else ""
-            events.append(dict(
-                kind="membership_change", file=stem, ids=ids, severity_hi="high", severity_lo="medium", confidence="high",
-                summary=f"{(file_b if typ == 'samples_added' else file_a)}: {len(ids)} sample id(s) {word} between releases.{same}",
-                evidence=ev,
-                limitation="Direct id comparison; whether the change is deliberate (QC, re-processing) is not visible in the files.",
-                repair=dict(action="restore_from_previous_release" if typ == "samples_removed" else "flag_for_review",
-                            ids=ids, file=file_a if typ == "samples_removed" else file_b,
-                            why=("Restore these samples from release A if their removal was unintended." if typ == "samples_removed"
-                                 else "Confirm that these new ids belong in the release and have genuine measurements."))))
+                added_dup = {i for it in groups.get((stem, "samples_added"), []) for i in it["sample_ids"]} & dup_ids
+                sub = {}
+                for it in cov:
+                    for i in it["sample_ids"]:
+                        sub.setdefault(i, []).append(it["subgroup"])
+                ev = [_ptr(i, name_a, file_a, f"{file_a}: id present in release A, absent from release B"
+                           + (f"; primary tumor in {', '.join(sub[i])}" if i in sub else "")) for i in ids]
+                tail = f" {len(added_dup)} new id(s) in B carry copies of other samples' profiles (see the duplicate finding)." if added_dup else ""
+                if cov:
+                    parts = [f"{it['subgroup']} {it['before']} -> {it['after']} (-{100.0 * (it['before'] - it['after']) / max(it['before'], 1):.1f}%)"
+                             for it in cov]
+                    tb, ta = cov[0]["total_before"], cov[0]["total_after"]
+                    same = (f"the file's total primary-tumor count is unchanged ({tb})" if tb == ta
+                            else f"total primary tumors {tb} -> {ta}")
+                    summary = (f"{file_a}: {len(ids)} sample(s) lost between releases; coverage fell in "
+                               f"{'; '.join(parts[:4])}{' ...' if len(parts) > 4 else ''}; {same}.{tail}")
+                else:
+                    summary = f"{file_a}: {len(ids)} sample id(s) removed between releases.{tail}"
+                events.append(dict(
+                    kind="membership_change", file=stem, ids=ids, severity_hi="high", severity_lo="medium", confidence="high",
+                    summary=summary, evidence=ev,
+                    limitation="Direct id comparison; subgroup labels come from release A's clinical file, and whether the removal is deliberate is not visible in the files.",
+                    repair=dict(action="restore_from_previous_release", ids=ids, file=file_a,
+                                why="Restore these samples from release A if their removal was unintended.")))
 
         elif typ == "profile_modified":
             cols = sorted({c for it in items for c in it.get("columns_changed", [])})
@@ -160,6 +175,8 @@ def _events(raw, fn_a, fn_b, name_a, name_b):
                             why="Check whether the missing values were withdrawn on purpose; consider restoring them from release A.")))
 
         elif typ == "coverage_loss":
+            if (stem, "samples_removed") in groups:
+                continue                                   # merged into the removal finding
             parts = []
             for it in items:
                 pct = 100.0 * (it["before"] - it["after"]) / max(it["before"], 1)
