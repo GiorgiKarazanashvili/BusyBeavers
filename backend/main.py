@@ -123,7 +123,7 @@ def run_findings(run_id: str, download: bool = False):
         if rec["status"] in ("pending", "running"):
             raise HTTPException(status_code=409, detail=f"Run '{run_id}' is still {rec['status']}.")
         raise HTTPException(status_code=409, detail=f"Run '{run_id}' has no valid findings.json: {rec.get('error') or 'unknown error'}")
-    headers = {"Content-Disposition": f'attachment; filename="findings-{run_id}.json"'} if download else None
+    headers = {"Content-Disposition": 'attachment; filename="findings.json"'} if download else None
     return FileResponse(path, media_type="application/json", headers=headers)
 
 # --- Q&A over a finished run (logic lives in detection/qa.py; nothing here reads data) ---

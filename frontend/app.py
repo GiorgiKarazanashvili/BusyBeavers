@@ -901,7 +901,7 @@ def tab_next(c: dict) -> None:
         st.html(rows_html(rows, scroll=True))
 
     section("Export")
-    st.download_button("Download findings.json", data=c["raw"], file_name=f"findings-{rid}.json", mime="application/json",
+    st.download_button("Download findings.json", data=c["raw"], file_name="findings.json", mime="application/json",
                        type="primary", key="dl", on_click=lambda: ss["exported"].add(rid))
     hint(f"The exact file the backend validated. Re-check with: python format/validate.py findings-{rid}.json")
 
