@@ -61,6 +61,15 @@ class ApiClient:
     def run(self, run_id: str) -> dict:
         return self._call("get", f"/api/runs/{run_id}").json()
 
+    def triage(self, run_id: str) -> dict | None:
+        """Quick-summary triage. Returns None when the backend has no /triage endpoint (older API)."""
+        try:
+            return self._call("get", f"/api/runs/{run_id}/triage").json()
+        except ApiError as e:
+            if e.status in (404, 405):
+                return None
+            raise
+
     def findings_bytes(self, run_id: str) -> bytes:
         """Exact bytes of the validated findings.json, as written by the backend."""
         return self._call("get", f"/api/runs/{run_id}/findings").content
