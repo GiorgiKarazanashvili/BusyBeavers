@@ -1,11 +1,24 @@
-# Cohort Control Tower: Cohort Firewall
+# Cohort Firewall
 
-Team Busy Beavers: [Giorgi Karazanashvili, Daniel Matuzka, Hoang Anh Khoi Le, Viriyananda Susilo Tjiong]
+**Product:** Cohort Firewall, for the Cohort Control Tower track
+**Team:** Busy Beavers: [Giorgi Karazanashvili], [Daniel Matuzka], [Hoang Anh Khoi Le], [Viriyananda Susilo Tjiong]
 
-Compares two releases of the TCGA-BRCA dataset and finds what changed: sample swaps, duplicate
-profiles under new IDs, added or removed samples, and lost measurements. It then works out which
-of the two protected analyses (A1, A2) read the changed records, reruns only those, leaves the
-rest alone with a stated reason, and writes a validated `findings.json` (format v0.2).
+## Who it's for and what they finish
+
+**User:** a research engineer responsible for a dataset that gets new releases.
+
+**Workflow:** connect two releases, see what changed (sample swaps, duplicate profiles under new
+IDs, samples that appeared or disappeared, coverage lost by subgroup, missing measurements),
+and rerun only the analyses those changes affect. The tool writes a validated `findings.json`
+(format v0.2) with findings, before/after analysis results, and proposed repairs.
+
+**Example:** on the practice release, the sample count is unchanged but membership changed.
+The tool flags the swap and the replaced samples, marks A1 (ER-alpha protein by clinical ER
+status) as affected and reruns it, and leaves A2 (RNA subtype mix) alone with the reason.
+
+Research use only: no diagnosis, treatment advice, risk score or clinical claim.
+
+**Demo video:** [link]
 
 The organizers' original challenge text is in [CHALLENGE_README.md](CHALLENGE_README.md).
 API and dashboard details are in [CONTROL_TOWER_README.md](CONTROL_TOWER_README.md).
@@ -80,3 +93,13 @@ alone gives identical numbers under the organizers' reference code.
 - ID format changes (case, trailing whitespace) are reported as removed plus added samples.
 - A verdict of `Conditional` means at least one finding touches an analysis; repairs are proposals only and no release file is modified.
 - No AI summary yet.
+
+## Human review and limitations
+
+Every finding carries `needs_human_review` and a `limitation` field, and repairs are proposals
+only: no release file is modified. [Check that the dashboard shows these, then say where.]
+
+## Third-party code
+
+pandas, numpy (BSD-3-Clause); FastAPI, uvicorn, httpx (BSD / MIT); Streamlit, requests (Apache-2.0);
+pytest (MIT). Data: TCGA-BRCA from the UCSC Xena hub, frozen release (checksums in `data/tcga-brca/sources.csv`).
