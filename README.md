@@ -64,6 +64,19 @@ in the same folder.
 Then compare `baseline` with `envelope-practice` in the dashboard. Envelopes ship without an RNA
 file; its absence is treated as normal.
 
+## Optional: free-text Q&A
+
+The Q&A tab has six question buttons that work with no setup. They answer from the run's
+`findings.json` and cite finding and sample IDs. Free-text questions need a language model:
+
+    brew install ollama                 # or the installer from ollama.com
+    ollama pull qwen2.5:3b              # about 2 GB
+    cp .env.example .env                # then uncomment the LLM_BASE_URL and OPENAI_MODEL lines
+
+Alternatively, put your own key in `.env` as `OPENAI_API_KEY`. Without a model, free text shows
+"needs a model" and everything else still works. Answers are accepted only if every ID they cite
+exists in the findings; off-topic and clinical questions are refused. `.env` is git-ignored.
+
 ## Check it yourself
 
     pytest -q                          # app tests
@@ -85,6 +98,7 @@ alone gives identical numbers under the organizers' reference code.
 | `cfw/impact.py` | The exact slice each analysis reads, compared between releases |
 | `detection/engine.py` | Turns that into v0.2 findings, reruns affected analyses, proposes repairs and a verdict |
 | `backend/`, `frontend/` | API, packaging and validation, dashboard (no detection logic) |
+| `detection/qa.py` | Q&A over a run’s findings, with a citation check
 
 ## Known limits
 
@@ -92,7 +106,7 @@ alone gives identical numbers under the organizers' reference code.
 - One replace-with-duplicates event is reported as three findings (duplicate, added, removed).
 - ID format changes (case, trailing whitespace) are reported as removed plus added samples.
 - A verdict of `Conditional` means at least one finding touches an analysis; repairs are proposals only and no release file is modified.
-- No AI summary yet.
+- Free-text Q&A uses a small local model, so it sometimes refuses valid questions. The buttons are the reliable path.
 
 ## Human review and limitations
 
@@ -101,5 +115,24 @@ only: no release file is modified. [Check that the dashboard shows these, then s
 
 ## Third-party code
 
-pandas, numpy (BSD-3-Clause); FastAPI, uvicorn, httpx (BSD / MIT); Streamlit, requests (Apache-2.0);
-pytest (MIT). Data: TCGA-BRCA from the UCSC Xena hub, frozen release (checksums in `data/tcga-brca/sources.csv`).
+Python packages (installed from `requirements.txt`):
+
+| Package | License |
+|---|---|
+| pandas, numpy | BSD-3-Clause |
+| FastAPI | MIT |
+| uvicorn, httpx | BSD-3-Clause |
+| Streamlit, requests, python-multipart | Apache-2.0 |
+| pytest | MIT |
+| cryptography (used by the organizers' `unseal.py`) | Apache-2.0 / BSD |
+
+Optional, installed by the user and not part of this repository:
+
+- Ollama (MIT) and the Qwen2.5-3B model, for free-text Q&A. The model has its own license; see its model card.
+- Or the user's own OpenAI API key.
+
+Organizer-provided code is included unmodified apart from the two Windows fixes taken from their repo:
+`data/tcga-brca/` scripts, `format/validate.py` and `envelopes/unseal.py`.
+
+Data: TCGA-BRCA from the UCSC Xena hub, frozen release (checksums in `data/tcga-brca/sources.csv`).
+No other data is used.
